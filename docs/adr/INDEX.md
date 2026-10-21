@@ -6,7 +6,7 @@
 
 _None._
 
-## Accepted (3)
+## Accepted (4)
 
 - [FY-0001](records/0001-record-decisions.md) Record architecture decisions of
   the organization (2026-10-21)
@@ -14,6 +14,8 @@ _None._
   one repository per concern (2026-10-22)
 - [FY-0003](records/0003-repository-naming.md) Name repositories by delivery
   mechanism (2026-10-22)
+- [FY-0004](records/0004-atom-contract.md) Atom layout and composition contract
+  (2026-10-22)
 
 ## Rejected (0)
 
