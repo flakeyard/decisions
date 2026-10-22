@@ -47,9 +47,10 @@ source.
   the generated project.
 - **Texts** of `flakeyard/decisions` are licensed under CC-BY-4.0.
 
-Copyright notices name "The flakeyard contributors". Contributions are accepted
-under the license of the repository they are made to; there is no contributor
-license agreement.
+Copyright notices name the maintainer, Alexander Antipov. Contributions are
+accepted under the license of the repository they are made to; there is no
+contributor license agreement, and contributors keep the copyright of their
+changes.
 
 Every repository follows the [REUSE](https://reuse.software/) specification:
 license texts in `LICENSES/`, licensing of files declared in `REUSE.toml` rather
@@ -67,7 +68,8 @@ packages and their licenses.
   repositories under MIT-0, and texts of `decisions` under CC-BY-4.0.
 - Templates MUST NOT add a license, a copyright notice or a license header of
   flakeyard to generated projects.
-- Copyright notices MUST name "The flakeyard contributors".
+- Copyright notices MUST name Alexander Antipov. Notices of third parties MUST
+  be kept.
 - Every repository MUST pass `reuse lint`, declare licensing in `REUSE.toml` and
   keep a top-level `LICENSE` with the license of most of its files.
 - Code copied from third parties MUST keep its license and be declared in
@@ -100,3 +102,5 @@ packages and their licenses.
   made for it.
 - **License headers in every file.** Noise in small files; `REUSE.toml` declares
   the same in one place.
+- **"The flakeyard contributors" in copyright notices.** Describes shared
+  authorship, but names no one who can act for the project.
