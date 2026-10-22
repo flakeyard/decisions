@@ -1,14 +1,16 @@
 ---
 id: FY-0004
 title: Atom layout and composition contract
-status: accepted
+status: superseded
 date: 2026-10-22
 supersedes: []
-superseded_by: []
+superseded_by: [FY-0017]
 related: [FY-0002, FY-0003]
 affects: ["atom-*:**", "action-flake-lock:**", "template-*:template/flake.nix*"]
 review_by:
 ---
+
+> **Superseded by [FY-0017](0017-atom-contract.md).**
 
 ## Context
 
