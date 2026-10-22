@@ -1,10 +1,10 @@
 ---
 id: FY-0014
 title: Secure the supply chain
-status: accepted
+status: superseded
 date: 2026-10-22
 supersedes: []
-superseded_by: []
+superseded_by: [FY-0018]
 related: [FY-0005, FY-0007, FY-0008, FY-0009, FY-0010, FY-0011, FY-0013]
 affects:
   [
@@ -16,6 +16,8 @@ affects:
   ]
 review_by:
 ---
+
+> **Superseded by [FY-0018](0018-supply-chain.md).**
 
 ## Context
 
