@@ -6,7 +6,7 @@
 
 _None._
 
-## Accepted (11)
+## Accepted (12)
 
 - [FY-0001](records/0001-record-decisions.md) Record architecture decisions of
   the organization (2026-10-21)
@@ -29,6 +29,8 @@ _None._
   (2026-10-22)
 - [FY-0011](records/0011-settings-as-code.md) Keep organization settings as code
   (2026-10-22)
+- [FY-0012](records/0012-develop-in-container.md) Develop every repository in
+  the dev container (2026-10-22)
 
 ## Rejected (0)
 
