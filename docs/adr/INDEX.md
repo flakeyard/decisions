@@ -6,7 +6,7 @@
 
 _None._
 
-## Accepted (7)
+## Accepted (8)
 
 - [FY-0001](records/0001-record-decisions.md) Record architecture decisions of
   the organization (2026-10-21)
@@ -22,6 +22,8 @@ _None._
   policy (2026-10-22)
 - [FY-0007](records/0007-branching-and-releases.md) Branching and releases
   (2026-10-22)
+- [FY-0008](records/0008-actions-and-workflows.md) Deliver actions and reusable
+  workflows (2026-10-22)
 
 ## Rejected (0)
 
