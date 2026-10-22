@@ -14,8 +14,6 @@ _None._
   one repository per concern (2026-10-22)
 - [FY-0003](records/0003-repository-naming.md) Name repositories by delivery
   mechanism (2026-10-22)
-- [FY-0004](records/0004-atom-contract.md) Atom layout and composition contract
-  (2026-10-22)
 - [FY-0005](records/0005-dev-container-image.md) Dev container image
   (2026-10-22)
 - [FY-0006](records/0006-versioning-and-support.md) Versioning and support
@@ -37,14 +35,17 @@ _None._
 - [FY-0015](records/0015-documentation-rules.md) Documentation rules
   (2026-10-22)
 - [FY-0016](records/0016-pin-form.md) Pin form for flake inputs (2026-10-22)
+- [FY-0017](records/0017-atom-contract.md) Atom layout and composition contract
+  (2026-10-22; supersedes FY-0004)
 
 ## Rejected (0)
 
 _None._
 
-## Superseded (0)
+## Superseded (1)
 
-_None._
+- [FY-0004](records/0004-atom-contract.md) Atom layout and composition contract
+  (2026-10-22; superseded by FY-0017)
 
 ## Deprecated (0)
 
