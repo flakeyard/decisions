@@ -47,7 +47,8 @@ is measured.
 - Renovate proposes every update as a pull request that passes CI before it is
   merged. Updates of third-party dependencies are proposed only after a minimum
   release age of 3 days, so that a compromised release has time to be noticed
-  and withdrawn.
+  and withdrawn. Updates of flakeyard's own repositories and updates that fix a
+  published vulnerability are proposed at once.
 
 ### Releases
 
@@ -65,7 +66,8 @@ is measured.
   and private vulnerability reporting; atoms and actions have CodeQL.
 - Workflows are linted by actionlint and zizmor through `atom-actions`.
 - Every repository runs OpenSSF Scorecard on a schedule and publishes its
-  results; findings are fixed or recorded as accepted with a reason.
+  results; findings are fixed or recorded as accepted with a reason, such as
+  Code-Review while one maintainer merges their own pull requests.
 
 ## Constraints
 
@@ -75,7 +77,8 @@ is measured.
   they are used.
 - Dependency updates MUST arrive as pull requests that pass CI. Updates of
   third-party dependencies MUST wait at least 3 days after their release.
-  Updates of flakeyard's own repositories MAY be proposed at once.
+  Updates of flakeyard's own repositories and updates that fix a published
+  vulnerability MAY be proposed at once.
 - Every published artifact MUST have a build provenance attestation; the image
   MUST also have an SBOM attestation.
 - Releases MUST be built by CI from the tagged commit; artifacts MUST NOT be
@@ -91,8 +94,7 @@ is measured.
 - (+) A compromised upstream release has to stay unnoticed for 3 days before an
   update to it is even proposed.
 - (+) Scorecard makes the posture visible to consumers and shows regressions.
-- (−) Security fixes of third-party dependencies also wait 3 days unless merged
-  by hand.
+- (−) Ordinary fixes of third-party dependencies arrive 3 days late.
 - (−) Every repository carries a Scorecard workflow and its findings to triage.
 - (±) Git-only releases have no attestation of their own; their trust rests on
   signed commits, protected tags and SHA references.
