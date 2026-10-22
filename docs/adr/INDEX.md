@@ -6,7 +6,7 @@
 
 _None._
 
-## Accepted (6)
+## Accepted (7)
 
 - [FY-0001](records/0001-record-decisions.md) Record architecture decisions of
   the organization (2026-10-21)
@@ -20,6 +20,8 @@ _None._
   (2026-10-22)
 - [FY-0006](records/0006-versioning-and-support.md) Versioning and support
   policy (2026-10-22)
+- [FY-0007](records/0007-branching-and-releases.md) Branching and releases
+  (2026-10-22)
 
 ## Rejected (0)
 
