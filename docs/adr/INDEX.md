@@ -6,7 +6,7 @@
 
 _None._
 
-## Accepted (10)
+## Accepted (11)
 
 - [FY-0001](records/0001-record-decisions.md) Record architecture decisions of
   the organization (2026-10-21)
@@ -26,6 +26,8 @@ _None._
   workflows (2026-10-22)
 - [FY-0009](records/0009-ci-on-runners.md) Run CI on hosted runners (2026-10-22)
 - [FY-0010](records/0010-release-bot.md) Release bot as a GitHub App
+  (2026-10-22)
+- [FY-0011](records/0011-settings-as-code.md) Keep organization settings as code
   (2026-10-22)
 
 ## Rejected (0)
