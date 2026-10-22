@@ -6,7 +6,7 @@
 
 _None._
 
-## Accepted (14)
+## Accepted (15)
 
 - [FY-0001](records/0001-record-decisions.md) Record architecture decisions of
   the organization (2026-10-21)
@@ -34,6 +34,8 @@ _None._
 - [FY-0013](records/0013-licenses.md) License code, generated files and texts
   (2026-10-22)
 - [FY-0014](records/0014-supply-chain.md) Secure the supply chain (2026-10-22)
+- [FY-0015](records/0015-documentation-rules.md) Documentation rules
+  (2026-10-22)
 
 ## Rejected (0)
 
