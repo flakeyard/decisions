@@ -6,7 +6,7 @@
 
 _None._
 
-## Accepted (16)
+## Accepted (17)
 
 - [FY-0001](records/0001-record-decisions.md) Record architecture decisions of
   the organization (2026-10-21)
@@ -38,6 +38,8 @@ _None._
   (2026-10-22; supersedes FY-0004)
 - [FY-0018](records/0018-supply-chain.md) Secure the supply chain (2026-10-22;
   supersedes FY-0014)
+- [FY-0019](records/0019-binary-cache.md) Binary cache (2026-10-22; review by
+  2027-10-22)
 
 ## Rejected (0)
 
