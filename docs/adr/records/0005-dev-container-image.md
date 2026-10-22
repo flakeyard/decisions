@@ -135,7 +135,7 @@ Supported are Docker, the Dev Containers tools, and rootless Podman with
 - The image size MUST be tracked in CI against a recorded budget; exceeding it
   MUST fail the build until the budget is raised deliberately.
 
-### Start-up
+### Entrypoint
 
 - The image MUST start as uid 0, and its entrypoint MUST:
   - validate `DEV_UID` and `DEV_GID` as decimal numbers and refuse 0 and
