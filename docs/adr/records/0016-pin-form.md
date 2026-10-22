@@ -102,7 +102,8 @@ Branches named like release tags are forbidden by organization settings, so
 
 This decision is revisited when Renovate's `nix` manager can replace `ref` and
 `rev` together: pull requests could then carry versions, release notes and major
-updates.
+updates. The proposal is tracked in
+[renovatebot/renovate#47309](https://github.com/renovatebot/renovate/discussions/47309).
 
 ## Constraints
 
