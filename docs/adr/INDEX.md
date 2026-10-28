@@ -6,7 +6,7 @@
 
 _None._
 
-## Accepted (18)
+## Accepted (19)
 
 - [FY-0001](records/0001-record-decisions.md) Record architecture decisions of
   the organization (2026-10-21)
@@ -16,8 +16,6 @@ _None._
   mechanism (2026-10-22)
 - [FY-0005](records/0005-dev-container-image.md) Dev container image
   (2026-10-22)
-- [FY-0006](records/0006-versioning-and-support.md) Versioning and support
-  policy (2026-10-22)
 - [FY-0007](records/0007-branching-and-releases.md) Branching and releases
   (2026-10-22)
 - [FY-0009](records/0009-ci-on-runners.md) Run CI on hosted runners (2026-10-22)
@@ -42,15 +40,20 @@ _None._
   (2026-10-28; supersedes FY-0010)
 - [FY-0022](records/0022-bootstrap.md) Bootstrap order and temporary exceptions
   (2026-10-28; review by 2027-04-30)
+- [FY-0023](records/0023-setup-nix.md) Set up Nix on CI runners (2026-10-28)
+- [FY-0024](records/0024-versioning-and-support.md) Versioning and support
+  policy (2026-10-28; supersedes FY-0006)
 
 ## Rejected (0)
 
 _None._
 
-## Superseded (4)
+## Superseded (5)
 
 - [FY-0004](records/0004-atom-contract.md) Atom layout and composition contract
   (2026-10-22; superseded by FY-0017)
+- [FY-0006](records/0006-versioning-and-support.md) Versioning and support
+  policy (2026-10-22; superseded by FY-0024)
 - [FY-0008](records/0008-actions-and-workflows.md) Deliver actions and reusable
   workflows (2026-10-22; superseded by FY-0020)
 - [FY-0010](records/0010-release-bot.md) Release bot as a GitHub App
