@@ -6,7 +6,7 @@
 
 _None._
 
-## Accepted (17)
+## Accepted (18)
 
 - [FY-0001](records/0001-record-decisions.md) Record architecture decisions of
   the organization (2026-10-21)
@@ -40,6 +40,8 @@ _None._
   workflows (2026-10-28; supersedes FY-0008)
 - [FY-0021](records/0021-release-bot.md) Release bot as a GitHub App
   (2026-10-28; supersedes FY-0010)
+- [FY-0022](records/0022-bootstrap.md) Bootstrap order and temporary exceptions
+  (2026-10-28; review by 2027-04-30)
 
 ## Rejected (0)
 
