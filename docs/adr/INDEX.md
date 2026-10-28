@@ -20,8 +20,6 @@ _None._
   policy (2026-10-22)
 - [FY-0007](records/0007-branching-and-releases.md) Branching and releases
   (2026-10-22)
-- [FY-0008](records/0008-actions-and-workflows.md) Deliver actions and reusable
-  workflows (2026-10-22)
 - [FY-0009](records/0009-ci-on-runners.md) Run CI on hosted runners (2026-10-22)
 - [FY-0010](records/0010-release-bot.md) Release bot as a GitHub App
   (2026-10-22)
@@ -40,15 +38,19 @@ _None._
   supersedes FY-0014)
 - [FY-0019](records/0019-binary-cache.md) Binary cache (2026-10-22; review by
   2027-10-22)
+- [FY-0020](records/0020-actions-and-workflows.md) Deliver actions and reusable
+  workflows (2026-10-28; supersedes FY-0008)
 
 ## Rejected (0)
 
 _None._
 
-## Superseded (2)
+## Superseded (3)
 
 - [FY-0004](records/0004-atom-contract.md) Atom layout and composition contract
   (2026-10-22; superseded by FY-0017)
+- [FY-0008](records/0008-actions-and-workflows.md) Deliver actions and reusable
+  workflows (2026-10-22; superseded by FY-0020)
 - [FY-0014](records/0014-supply-chain.md) Secure the supply chain (2026-10-22;
   superseded by FY-0018)
 
