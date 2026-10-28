@@ -1,14 +1,16 @@
 ---
 id: FY-0010
 title: Release bot as a GitHub App
-status: accepted
+status: superseded
 date: 2026-10-22
 supersedes: []
-superseded_by: []
+superseded_by: [FY-0021]
 related: [FY-0007, FY-0008, FY-0009]
 affects: [".github:org/**", "*:.github/workflows/**", "workflow-*:**"]
 review_by:
 ---
+
+> **Superseded by [FY-0021](0021-release-bot.md).**
 
 ## Context
 
