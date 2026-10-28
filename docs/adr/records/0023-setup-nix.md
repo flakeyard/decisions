@@ -105,12 +105,12 @@ The action has no input for free-form configuration.
 ### Token
 
 The input `github-token` defaults to `GITHUB_TOKEN`; an empty value disables it.
-The token must consist only of letters, digits and underscores. It is written as
-`access-tokens` for `github.com` into the `nix.conf` of the runner's user, with
-mode `0600`, and is masked in the log. It is not written into
-`/etc/nix/nix.conf`, which every user can read, and not into the environment of
-later steps. It stays on disk until the job ends; commands run through `sudo` do
-not use it.
+The token must consist only of letters, digits, underscores, dots and hyphens.
+It is written as `access-tokens` for `github.com` into the `nix.conf` of the
+runner's user, with mode `0600`, and is masked in the log. It is not written
+into `/etc/nix/nix.conf`, which every user can read, and not into the
+environment of later steps. It stays on disk until the job ends; commands run
+through `sudo` do not use it.
 
 ### Public API
 
