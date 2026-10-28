@@ -1,10 +1,10 @@
 ---
 id: FY-0006
 title: Versioning and support policy
-status: accepted
+status: superseded
 date: 2026-10-22
 supersedes: []
-superseded_by: []
+superseded_by: [FY-0024]
 related: [FY-0002, FY-0004, FY-0005]
 affects:
   [
@@ -19,6 +19,8 @@ affects:
   ]
 review_by:
 ---
+
+> **Superseded by [FY-0024](0024-versioning-and-support.md).**
 
 ## Context
 
