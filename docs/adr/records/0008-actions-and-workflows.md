@@ -1,14 +1,16 @@
 ---
 id: FY-0008
 title: Deliver actions and reusable workflows
-status: accepted
+status: superseded
 date: 2026-10-22
 supersedes: []
-superseded_by: []
+superseded_by: [FY-0020]
 related: [FY-0002, FY-0003, FY-0006, FY-0007]
 affects: ["action-*:**", "workflow-*:**", "template-*:template/.github/**"]
 review_by:
 ---
+
+> **Superseded by [FY-0020](0020-actions-and-workflows.md).**
 
 ## Context
 
