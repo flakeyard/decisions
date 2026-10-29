@@ -6,7 +6,7 @@
 
 _None._
 
-## Accepted (19)
+## Accepted (20)
 
 - [FY-0001](records/0001-record-decisions.md) Record architecture decisions of
   the organization (2026-10-21)
@@ -43,6 +43,8 @@ _None._
 - [FY-0023](records/0023-setup-nix.md) Set up Nix on CI runners (2026-10-28)
 - [FY-0024](records/0024-versioning-and-support.md) Versioning and support
   policy (2026-10-28; supersedes FY-0006)
+- [FY-0025](records/0025-publish-image.md) Publish the dev container image
+  (2026-10-28)
 
 ## Rejected (0)
 
