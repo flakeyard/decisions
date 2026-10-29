@@ -6,7 +6,7 @@
 
 _None._
 
-## Accepted (20)
+## Accepted (21)
 
 - [FY-0001](records/0001-record-decisions.md) Record architecture decisions of
   the organization (2026-10-21)
@@ -45,6 +45,8 @@ _None._
   policy (2026-10-28; supersedes FY-0006)
 - [FY-0025](records/0025-publish-image.md) Publish the dev container image
   (2026-10-28)
+- [FY-0026](records/0026-stable-nixpkgs.md) Follow a stable nixpkgs release
+  (2026-10-29)
 
 ## Rejected (0)
 
