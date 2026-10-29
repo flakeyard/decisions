@@ -117,8 +117,10 @@ Consumers reference the image by digest.
 Supported are Docker, the Dev Containers tools, and rootless Podman 4.3 or later
 with `userns = "keep-id:uid=1000,gid=1000"` set in the user's own
 `containers.conf`. A shared `devcontainer.json` cannot carry that option,
-because Docker rejects it. The entrypoint needs the capabilities `CHOWN`,
-`DAC_OVERRIDE`, `SETUID` and `SETGID`, which Docker and Podman grant by default.
+because Docker rejects it. The entrypoint and the Nix daemon need the
+capabilities `CHOWN`, `DAC_OVERRIDE`, `FOWNER`, `SETUID` and `SETGID`, which
+Docker and Podman grant by default; without `FOWNER`, builds cannot set the
+permissions of their outputs.
 
 ## Constraints
 
