@@ -1,14 +1,16 @@
 ---
 id: FY-0025
 title: Publish the dev container image
-status: accepted
+status: superseded
 date: 2026-10-28
 supersedes: []
-superseded_by: []
+superseded_by: [FY-0027]
 related: [FY-0005, FY-0009, FY-0013, FY-0018, FY-0020, FY-0021]
 affects: ["image-devcontainer:**"]
 review_by:
 ---
+
+> **Superseded by [FY-0027](0027-publish-image.md).**
 
 ## Context
 
