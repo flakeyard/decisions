@@ -44,7 +44,10 @@ Prototypes with real tools established:
 - With `includeNixDB`, only `contents` are garbage collection roots; anything
   the image uses outside them is deleted by the first `nix store gc`.
 - Rootless Podman maps the host user to root in the container unless started
-  with `--userns=keep-id`.
+  with `--userns=keep-id`. With plain `keep-id`, the host user keeps its uid and
+  gets its own entry in `/etc/passwd`, so the image cannot adapt `dev` to a host
+  uid other than 1000; `keep-id:uid=1000,gid=1000` maps the host user to `dev`
+  instead.
 
 ## Decision
 
@@ -111,9 +114,11 @@ Consumers reference the image by digest.
 
 ### Engines
 
-Supported are Docker, the Dev Containers tools, and rootless Podman with
-`userns = "keep-id"` set in the user's own `containers.conf`. A shared
-`devcontainer.json` cannot carry that option, because Docker rejects it.
+Supported are Docker, the Dev Containers tools, and rootless Podman 4.3 or later
+with `userns = "keep-id:uid=1000,gid=1000"` set in the user's own
+`containers.conf`. A shared `devcontainer.json` cannot carry that option,
+because Docker rejects it. The entrypoint needs the capabilities `CHOWN`,
+`DAC_OVERRIDE`, `SETUID` and `SETGID`, which Docker and Podman grant by default.
 
 ## Constraints
 

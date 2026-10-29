@@ -114,7 +114,8 @@ state these rules for consumers and link here.
   `vX.Y.Z` and a moving tag `vX`. `.github` and `decisions` MUST NOT be
   released.
 - Tags `vX.Y.Z` and their releases MUST NOT be changed or deleted after
-  publication.
+  publication. The notes of a release MAY be extended with references to
+  artifacts published for it, such as the digest of an image.
 - The first release with compatibility guarantees MUST be `v1.0.0`. Releases
   `0.y.z` MUST be marked as pre-releases.
 - Every kind of repository MUST have its public API listed in an accepted `FY`

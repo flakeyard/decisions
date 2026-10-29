@@ -54,7 +54,9 @@ state the rules briefly and link to the ADR that explains them.
   (`FY-NNNN`) and a link to the record.
 - ADRs MUST be changed through pull requests. An accepted ADR MUST NOT be edited
   in substance; it is superseded instead. Typos, links and `affects` may be
-  corrected.
+  corrected. Until every flakeyard product has released `v1.0.0`, a very small
+  change of substance MAY be made in place; larger changes MUST supersede the
+  ADR.
 - `affects` MUST name the governed code: path globs for this repository and
   `repository-glob:path-glob` for other repositories of the organization.
 - Records and policy documents MUST be written in English.
