@@ -150,7 +150,9 @@ permissions of their outputs.
   - adapt `dev` to the owner of the working directory only when it is a mount
     point owned by a non-root uid;
   - change ownership only of files on the home directory's own filesystem, never
-    of mount points or mounted files;
+    of mount points or mounted files; apart from them, it MAY give `dev` the
+    anonymous pipes and sockets and the container's own terminal that the engine
+    passes as standard input, output and error;
   - run the Nix daemon supervised and report when it does not answer;
   - run the command as `dev` under an init process that reaps children and
     forwards signals.

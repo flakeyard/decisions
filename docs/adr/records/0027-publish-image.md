@@ -66,8 +66,11 @@ attested.
 The configuration of the image contains nothing that changes from commit to
 commit by itself: no commit hash, no version from the workflow and the creation
 date `1970-01-01`. Version, commit, source, license and description are
-annotations of the manifest list and part of the attestations. The same commit
-therefore yields the same platform digests.
+annotations of the manifest list. The same commit therefore yields the same
+platform digests. Attestations are verified against the digest and the release
+workflow, not against a commit: a platform digest that a release leaves
+unchanged keeps the attestations of the release that first published it, and the
+attested manifest list names the commit.
 
 Every platform manifest gets a provenance attestation and an SBOM attestation,
 and the manifest list gets a provenance attestation. The SBOM is generated with
