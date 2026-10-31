@@ -28,8 +28,10 @@ repositories.
 ## Decision
 
 Settings of the organization and of its repositories are kept as code in
-`flakeyard/.github` under `org/`, as JSON files and two idempotent scripts that
-use the GitHub API through `gh`:
+`flakeyard/.github` under `org/`, as JSON files and two idempotent entry-point
+scripts that use the GitHub API through `gh`. Each script may source helper
+files from a directory named after it (`org/apply/`, `org/settings/`), one file
+per concern; the helpers are not run on their own:
 
 - `settings.sh` applies organization settings: base permissions, who may create
   repositories, and Actions policies (allowed actions, required SHA pinning,
@@ -63,6 +65,8 @@ Settings without an API, or that depend on external services, are listed in
   steps.
 - The scripts MUST be idempotent and MUST be safe to run for all repositories at
   once.
+- Only `settings.sh` and `apply.sh` MAY be run; files under `org/apply/` and
+  `org/settings/` MUST only be sourced by them.
 - Differences between repositories MUST be derived only from name prefixes,
   except for `.github` and `decisions`, which MAY be named explicitly.
 - `apply.sh` MUST be run for a new repository before it receives its first pull
