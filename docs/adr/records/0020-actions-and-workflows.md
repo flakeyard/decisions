@@ -112,7 +112,7 @@ them. A client ID without a key is an error, not a fallback. Personal access
 tokens are not supported. Without an App:
 
 - publishing after a release (images, binary cache, release assets) still works,
-  because it runs in the same workflow run as the release, not in a workflow
+  because it runs in the workflow run of the release commit, not in a workflow
   triggered by the new tag;
 - checks do not start on pull requests opened by the release workflow, so the
   release workflow starts the check workflow on that branch through
@@ -182,8 +182,9 @@ tests and fixtures are not part of what consumers reference.
   documented features. A client ID without a private key MUST fail the run.
 - Workflows MUST NOT accept personal access tokens.
 - Workflows MUST NOT require secrets or Apps of flakeyard.
-- Publishing that follows a release MUST run in the same workflow run as the
-  release.
+- Publishing that follows a release MUST run in a workflow run of the release
+  commit (the run that created the release, or a rerun of it), never in a
+  workflow triggered by the new tag: attestations name the commit of the run.
 - Moving the tag `vX` MUST be an input that is off by default.
 
 ### Test isolation
