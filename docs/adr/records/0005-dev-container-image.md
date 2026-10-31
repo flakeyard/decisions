@@ -117,8 +117,10 @@ Consumers reference the image by digest.
 Supported are Docker, the Dev Containers tools, and rootless Podman 4.3 or later
 with `userns = "keep-id:uid=1000,gid=1000"` set in the user's own
 `containers.conf`. A shared `devcontainer.json` cannot carry that option,
-because Docker rejects it. The entrypoint needs the capabilities `CHOWN`,
-`DAC_OVERRIDE`, `SETUID` and `SETGID`, which Docker and Podman grant by default.
+because Docker rejects it. The entrypoint and the Nix daemon need the
+capabilities `CHOWN`, `DAC_OVERRIDE`, `FOWNER`, `SETUID` and `SETGID`, which
+Docker and Podman grant by default; without `FOWNER`, builds cannot set the
+permissions of their outputs.
 
 ## Constraints
 
@@ -148,7 +150,9 @@ because Docker rejects it. The entrypoint needs the capabilities `CHOWN`,
   - adapt `dev` to the owner of the working directory only when it is a mount
     point owned by a non-root uid;
   - change ownership only of files on the home directory's own filesystem, never
-    of mount points or mounted files;
+    of mount points or mounted files; apart from them, it MAY give `dev` the
+    anonymous pipes and sockets and the container's own terminal that the engine
+    passes as standard input, output and error;
   - run the Nix daemon supervised and report when it does not answer;
   - run the command as `dev` under an init process that reaps children and
     forwards signals.
