@@ -30,8 +30,6 @@ _None._
 - [FY-0016](records/0016-pin-form.md) Pin form for flake inputs (2026-10-22)
 - [FY-0017](records/0017-atom-contract.md) Atom layout and composition contract
   (2026-10-22; supersedes FY-0004)
-- [FY-0018](records/0018-supply-chain.md) Secure the supply chain (2026-10-22;
-  supersedes FY-0014)
 - [FY-0019](records/0019-binary-cache.md) Binary cache (2026-10-22; review by
   2027-10-22)
 - [FY-0020](records/0020-actions-and-workflows.md) Deliver actions and reusable
@@ -47,12 +45,14 @@ _None._
   (2026-10-29)
 - [FY-0027](records/0027-publish-image.md) Publish the dev container image
   (2026-10-29; supersedes FY-0025)
+- [FY-0028](records/0028-supply-chain.md) Secure the supply chain (2026-11-02;
+  supersedes FY-0018)
 
 ## Rejected (0)
 
 _None._
 
-## Superseded (6)
+## Superseded (7)
 
 - [FY-0004](records/0004-atom-contract.md) Atom layout and composition contract
   (2026-10-22; superseded by FY-0017)
@@ -64,6 +64,8 @@ _None._
   (2026-10-22; superseded by FY-0021)
 - [FY-0014](records/0014-supply-chain.md) Secure the supply chain (2026-10-22;
   superseded by FY-0018)
+- [FY-0018](records/0018-supply-chain.md) Secure the supply chain (2026-10-22;
+  supersedes FY-0014; superseded by FY-0028)
 - [FY-0025](records/0025-publish-image.md) Publish the dev container image
   (2026-10-28; superseded by FY-0027)
 
