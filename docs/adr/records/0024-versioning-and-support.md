@@ -5,7 +5,7 @@ status: accepted
 date: 2026-10-28
 supersedes: [FY-0006]
 superseded_by: []
-related: [FY-0002, FY-0005, FY-0017, FY-0023]
+related: [FY-0002, FY-0005, FY-0007, FY-0017, FY-0023, FY-0029]
 affects:
   [
     ".github:VERSIONING.md",
@@ -76,8 +76,10 @@ of each kind of repository is:
 - **Templates**: questions and their defaults, the layout of generated projects,
   the major versions of other flakeyard repositories they reference, and the
   minimum Copier version.
-- **Renovate preset**: preset names, and rules that change which updates are
-  proposed, grouped or merged automatically.
+- **Renovate preset**: names of the presets outside `internal/`, and the rules
+  the presets set explicitly that change which updates are proposed, grouped or
+  merged automatically, or which commit types they propose. Defaults of the
+  Renovate version that runs them are not ([FY-0029](0029-renovate-mend.md)).
 
 Versions of tools taken from nixpkgs are not part of the public API. The Nix of
 the image and of `action-setup-nix` is: its implementation and its version. A
