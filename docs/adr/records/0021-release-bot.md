@@ -118,4 +118,6 @@ The App is internal to flakeyard. Consumers bring their own App or none
 - **The private key as an organization secret.** One place to set and rotate,
   but every workflow on every branch of every repository could read it.
 - **Required reviewers on the environment `release`.** Also stops new branches
-  from reaching the key, but every release would wait for a person.
+  from reaching the key, but every release would wait for a person. Rejected
+  here; [FY-0028](0028-supply-chain.md) later adds a reviewer against a
+  compromised third-party app, not instead of the branch policy.
