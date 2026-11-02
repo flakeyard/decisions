@@ -6,7 +6,7 @@
 
 _None._
 
-## Accepted (21)
+## Accepted (22)
 
 - [FY-0001](records/0001-record-decisions.md) Record architecture decisions of
   the organization (2026-10-21)
@@ -48,6 +48,8 @@ _None._
 - [FY-0030](records/0030-actions-workflows-and-release-bot.md) Deliver actions
   and workflows with a gated release bot (2026-11-02; supersedes FY-0020,
   FY-0021)
+- [FY-0031](records/0031-check-pull-requests-and-pushes-with-workflow-check.md)
+  Check pull requests and pushes with workflow-check (2026-11-02)
 
 ## Rejected (0)
 
