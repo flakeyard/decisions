@@ -92,8 +92,8 @@ write to every repository. Applying that showed:
   them: the setting "Allow GitHub Actions to create and approve pull requests"
   (`can_approve_pull_request_reviews`) is one flag, at the organization and at
   each repository. A repository can enable it only while the organization allows
-  it, and a new repository takes the organization's value when it is created;
-  later changes at the organization do not reach it. With the flag on, any job
+  it, and a repository that does not set its own value takes the organization's
+  value, also when the organization changes it later. With the flag on, any job
   with `pull-requests: write` can approve a pull request as
   `github-actions[bot]`, and a workflow can ask for that permission in its own
   file whatever the default is.
@@ -280,8 +280,8 @@ patch release.
 The organization and every released repository allow GitHub Actions to create
 and approve pull requests; every other repository does not. Organization
 settings as code set the flag at both levels
-([FY-0011](0011-settings-as-code.md)), so that a repository created later does
-not keep the inherited value.
+([FY-0011](0011-settings-as-code.md)), so that no repository keeps the value of
+the organization.
 
 The flag lets any workflow of a released repository approve a pull request as
 `github-actions[bot]`, so anyone who can push, including a third-party app with
