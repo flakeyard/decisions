@@ -57,7 +57,8 @@ are:
 
 - `atom-nix`: Nix files. nixfmt; statix and deadnix.
 - `atom-shell`: shell scripts. shfmt; shellcheck.
-- `atom-actions`: GitHub Actions workflows. actionlint and zizmor.
+- `atom-workflows`: GitHub Actions workflow and action files. actionlint and
+  zizmor.
 - `atom-markdown`: documentation. prettier for Markdown only; markdownlint;
   lychee as an app.
 - `atom-data-formats`: YAML, JSON and TOML formatters.
