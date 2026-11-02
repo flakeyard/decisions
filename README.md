@@ -26,6 +26,21 @@ decisions.
 3. When the decision is made, the status changes to `accepted` or `rejected` and
    `docs/adr/INDEX.md` is regenerated.
 
+## Bootstrap
+
+This repository is bootstrapped under
+[FY-0022](docs/adr/records/0022-bootstrap.md). It has no CI checks yet. Until
+their providers are released:
+
+- Prettier, markdownlint and typos run locally before every pull request
+  (provider: `workflow-check` and the atoms);
+- pull request titles are checked by the reviewer (provider: `workflow-check`);
+- rulesets require no status checks (provider: `workflow-check`);
+- CI does not check that the tag of the preset in `renovate.json` belongs to an
+  immutable release ([FY-0028](docs/adr/records/0028-supply-chain.md))
+  (provider: `workflow-check`);
+- OpenSSF Scorecard is not run (provider: `workflow-check`).
+
 ## License
 
 The text of the records is licensed under
