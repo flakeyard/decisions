@@ -5,7 +5,7 @@ status: accepted
 date: 2026-10-28
 supersedes: []
 superseded_by: []
-related: [FY-0007, FY-0009, FY-0012, FY-0018, FY-0020]
+related: [FY-0007, FY-0009, FY-0012, FY-0018, FY-0020, FY-0031]
 affects:
   [
     "*:.github/workflows/**",
@@ -35,7 +35,8 @@ depends on it:
 1. `workflow-release`, which releases every repository;
 2. `action-setup-nix`, which installs Nix in CI;
 3. `image-devcontainer`, the development environment;
-4. `workflow-check`, the atoms and `renovate-config`.
+4. `workflow-check`, then `action-flake-lock`, then the atoms, starting with
+   `atom-workflows`, and `renovate-config`.
 
 Until a repository's checks can come from released flakeyard products, the
 missing ones are replaced:

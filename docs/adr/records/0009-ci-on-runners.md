@@ -5,7 +5,7 @@ status: accepted
 date: 2026-10-22
 supersedes: []
 superseded_by: []
-related: [FY-0004, FY-0005, FY-0007, FY-0008]
+related: [FY-0004, FY-0005, FY-0007, FY-0008, FY-0031]
 affects:
   [
     "*:.github/workflows/**",
@@ -69,10 +69,12 @@ There are three levels of caching:
 
 ### Required checks
 
-Every repository ends its CI with one job, `required`, that depends on all other
-jobs and fails if any of them failed or was cancelled. It is the only required
-status check, so organization settings name the same check in every repository
-regardless of its matrix.
+Every repository ends its CI with one job, `required`, provided by
+`workflow-check`
+([FY-0031](0031-check-pull-requests-and-pushes-with-workflow-check.md)), that
+depends on all other jobs and fails if any of them failed or was cancelled. Its
+check, `check / required`, is the only required status check, so organization
+settings name the same check in every repository regardless of its matrix.
 
 ## Constraints
 
@@ -108,9 +110,11 @@ regardless of its matrix.
 
 ### Status checks
 
-- Every repository with CI MUST have a final job `required` that depends on all
-  other jobs and fails when any of them did not succeed.
-- `required` MUST be the only required status check of the branch rulesets.
+- Every repository with CI MUST have a final job `required`, provided by
+  `workflow-check`, that depends on all other jobs and fails when any of them
+  did not succeed.
+- Its check `check / required` MUST be the only required status check of the
+  branch rulesets.
 
 ## Consequences
 

@@ -18,6 +18,7 @@ related:
     FY-0024,
     FY-0028,
     FY-0029,
+    FY-0031,
   ]
 affects:
   [
@@ -132,11 +133,16 @@ repository, and the tools it runs come from the action's own `flake.nix` and
 `flake.lock`, so a release of the action fixes the versions of its tools. Only
 `action-setup-nix` runs before Nix exists and pins its installer by hash.
 
-Steps that only call the GitHub API, such as moving a tag, reading a release or
-posting a commit status, are an exception: they use `bash`, `gh` and `jq` as
-installed on GitHub-hosted runners and may live in an action or in a workflow.
-They run with `set -euo pipefail`, and those tools are part of the documented
-runner requirements.
+Building and evaluating the consumer's `checks` and `apps` is the task of a
+workflow or action, not a tool it runs; Nix for it comes from
+`action-setup-nix`.
+
+Steps that only call the GitHub API, such as moving a tag, reading a release,
+reading a repository file through the contents API or posting a commit status,
+are an exception: they use `bash`, `gh` and `jq` as installed on GitHub-hosted
+runners and may live in an action or in a workflow. They run with
+`set -euo pipefail`, and those tools are part of the documented runner
+requirements.
 
 Actions are generic: project specifics, such as which flake outputs to build or
 which systems to check, are inputs. Untrusted values, such as pull request
@@ -311,10 +317,12 @@ and the release workflow is referenced at the commit of one of its release tags.
 - An action MUST be a composite action with one task.
 - An action MUST take its tools from its own `flake.lock`. It MUST NOT run tools
   from `nixpkgs#`, from the consumer's flake, or downloaded without a pinned
-  hash. `action-setup-nix` MUST pin its installer by hash.
-- Steps that only call the GitHub API MAY use `bash`, `gh` and `jq` of
-  GitHub-hosted runners, MUST run with `set -euo pipefail` and MUST be listed in
-  the runner requirements of their action or workflow.
+  hash. `action-setup-nix` MUST pin its installer by hash. Building or
+  evaluating the consumer's checks and apps is the task, not a tool.
+- Steps that only call the GitHub API, including reading repository files
+  through the contents API, MAY use `bash`, `gh` and `jq` of GitHub-hosted
+  runners, MUST run with `set -euo pipefail` and MUST be listed in the runner
+  requirements of their action or workflow.
 - An action MUST NOT assume project-specific names; they MUST be inputs.
 - Values from events, inputs and other untrusted sources MUST reach scripts only
   through environment variables. `${{ }}` expressions MUST NOT appear inside
