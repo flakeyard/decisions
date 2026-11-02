@@ -106,6 +106,18 @@ write to every repository. Applying that showed:
   `GITHUB_TOKEN` with `contents: write` can make; it needs neither the bypass of
   the tag ruleset nor the key.
 
+A live probe of the gated release workflow then showed:
+
+- Each release asks for one approval. Rerunning the failed jobs of a rejected
+  run asks again, and the approvals of a run list only its latest attempt.
+- Time spent waiting for approval does not count toward `timeout-minutes`, and a
+  waiting job holds its concurrency group.
+- After a release, `GITHUB_TOKEN` opens the next release pull request.
+- A merge commit whose message contains `[skip ci]` gets no push run.
+- release-please finds the latest release only by the version in the manifest.
+  While that version has no tag, it lists the whole history again and bumps the
+  version by all of it.
+
 This record replaces [FY-0020](0020-actions-and-workflows.md) and
 [FY-0021](0021-release-bot.md) with these findings. What changes is who opens
 release pull requests, which jobs use the environment `release` and when, the
@@ -218,7 +230,9 @@ client ID is the organization variable `BOT_CLIENT_ID`, used by workflows. Its
 private key is the secret `APP_PRIVATE_KEY` of the GitHub environment `release`
 of every repository that releases, and that environment can be deployed only
 from `main` and `release/v*` and only after an organization owner approves the
-job ([FY-0028](0028-supply-chain.md)). Only organization owners can create
+job ([FY-0028](0028-supply-chain.md)). Maintenance branches are `release/vN`
+with `N >= 1`: releases `0.y.z` are made only on `main`, and the release
+workflow skips pushes to `release/v0`. Only organization owners can create
 branches `release/v*`, so the branch policy cannot be met by a new branch.
 Organization settings as code create the environment, its branch policy, its
 reviewer and the rulesets; the key is set when a repository is set up and when
@@ -240,21 +254,26 @@ latest runs with `GITHUB_TOKEN` in a job without the environment.
 The release workflow first runs a job without the key and without the
 environment that decides whether the job with the key is due: when the push is
 the merge of a release pull request still labelled `autorelease: pending`; when
-such a pull request was merged earlier and the run of its merge commit failed or
-never ran, so this run takes over; or when the tag `vX` has to be created or
-moved forward to an existing release. A release whose job was rejected is not
-due again on later pushes: the owner either reruns the rejected run, which asks
-for approval again, or abandons the version by removing its pending label, and
-the next release pull request takes the next version. That decision is not a
-security boundary: a wrong decision costs an approval request or delays a
-release, and the job with the key derives what it does from the repository when
-it runs. Without an environment, the job with the key runs on every push, as
-there is nothing to save.
+such a pull request was merged earlier and the newest push run of its merge
+commit completed without a rejection, so this run takes over; or when the tag
+`vX` has to be created or moved forward to an existing release. A release whose
+job was rejected is not due again on later pushes: the owner either reruns the
+rejected run, which asks for approval again, or abandons the version: relabels
+the pull request from `autorelease: pending` to `autorelease: abandoned` and
+merges a revert of its merge commit, which puts the manifest back at the last
+released version. The next release pull request usually has the same version
+number, since no tag was created. That decision is not a security boundary: a
+wrong decision costs an approval request or delays a release, and the job with
+the key derives what it does from the repository when it runs. The decision is
+reported in the job summary and as notices of the run. Without an environment,
+the job with the key runs on every push, as there is nothing to save.
 
-A run can be approved and rerun only for 30 days. When the run of a pending
-merge commit is older than 29 days, the release workflow fails with the
-instruction to abandon that version and cut the next patch release, instead of
-releasing a commit whose own run can no longer publish it.
+A run can be approved and rerun only for 30 days. When the merge commit of a
+pending release pull request has no push run, or its run is older than 29 days,
+the release workflow fails with the instruction to abandon that version, instead
+of releasing a commit whose own run can never publish it. When a release exists
+but the run of its commit can no longer publish it, the owner cuts the next
+patch release.
 
 ### Actions may create pull requests
 
@@ -278,12 +297,12 @@ second App for pull requests only or through one gated job for both passes.
 ### Approval
 
 The owner approves a release by checking the repository, not the output of the
-run, because a modified caller workflow can write any summary: the run is a push
-run of the release workflow at a commit that merges a release pull request the
-owner merged, the commits since the previous release are signed squash merges of
-reviewed pull requests, `.github/` changed only as reviewed, and the release
-workflow is referenced at the commit of one of its release tags. `org/README.md`
-of `.github` lists the steps.
+run, because a modified caller workflow can write any summary or notice: the run
+is a push run of the release workflow at a commit that merges a release pull
+request the owner merged, the commits since the previous release are signed
+squash merges of reviewed pull requests, `.github/` changed only as reviewed,
+and the release workflow is referenced at the commit of one of its release tags.
+`org/README.md` of `.github` lists the steps.
 
 ## Constraints
 
@@ -351,17 +370,19 @@ of `.github` lists the steps.
 - A release workflow MUST start a job that uses an environment given by the
   caller only when a job without the key and without the environment has decided
   that it is due: a merged release pull request is pending and this push merged
-  it, or the run of its merge commit failed or never ran; or the tag `vX` must
-  be created or moved forward. Without an environment, the job MAY run on every
-  push.
+  it, or the newest push run of its merge commit completed without a rejection;
+  or the tag `vX` must be created or moved forward. Without an environment, the
+  job MAY run on every push.
 - A merged release pull request whose release was rejected MUST NOT make later
   pushes due.
 - The job with the key MUST derive what it does from the repository when it
   runs, not from the decision. It MUST NOT check out or run code of the
   repository.
-- A release workflow MUST NOT take over a release whose run of the merge commit
-  is older than 29 days, or tell anyone to publish by hand; it MUST fail with
-  the instruction to abandon that version and cut the next patch release.
+- A release workflow MUST NOT take over a pending release whose merge commit has
+  no push run or whose run is older than 29 days, or tell anyone to publish by
+  hand; it MUST fail with the instruction to abandon that version. A release
+  that exists but whose run can no longer publish it MUST NOT be published from
+  another run; the next patch release replaces it.
 - Marking the latest release MUST use `GITHUB_TOKEN` and MUST NOT use the
   environment `release`.
 
@@ -381,6 +402,8 @@ of `.github` lists the steps.
   environment `release`, and `release` MUST be deployable only from `main` and
   `release/v*`. It MUST NOT be an organization or repository secret.
 - Rulesets MUST allow only organization owners to create branches `release/v*`.
+- Release workflows MUST release only on `main` and `release/vN` with `N >= 1`,
+  and MUST skip pushes to `release/v0`.
 - Workflows MUST identify the App by `BOT_CLIENT_ID`; rulesets MUST name it by
   `BOT_APP_ID`.
 - Only jobs that create releases, move tags `v*` or open pull requests that
@@ -423,9 +446,9 @@ of `.github` lists the steps.
   and release. It is only as good as a check of the repository that does not
   rely on the run's own output, and the owner has to make it for every release.
 - (−) A rejected release blocks new release pull requests until the owner reruns
-  or abandons it, and an abandoned version is skipped.
-- (−) A release left waiting for 29 days can no longer be published; its version
-  is abandoned.
+  or abandons it, and abandoning it takes a revert commit.
+- (−) A release left waiting for 29 days, or merged without a push run, can no
+  longer be published; its version is abandoned.
 - (−) A misconfigured key of a gated environment shows up only in a run that
   releases, after the approval.
 - (−) Release pull requests of flakeyard rely on `workflow_dispatch` and commit
