@@ -6,7 +6,7 @@
 
 _None._
 
-## Accepted (21)
+## Accepted (22)
 
 - [FY-0001](records/0001-record-decisions.md) Record architecture decisions of
   the organization (2026-10-21)
@@ -47,6 +47,8 @@ _None._
   (2026-10-29; supersedes FY-0025)
 - [FY-0028](records/0028-supply-chain.md) Secure the supply chain (2026-11-02;
   supersedes FY-0018)
+- [FY-0029](records/0029-renovate-mend.md) Run Renovate as the Mend-hosted app
+  (2026-11-02)
 
 ## Rejected (0)
 

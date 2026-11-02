@@ -18,6 +18,7 @@ related:
     FY-0021,
     FY-0022,
     FY-0024,
+    FY-0029,
   ]
 affects:
   [
@@ -77,12 +78,13 @@ not account for:
   has no vulnerability data for GitHub tags, flake inputs or container images. A
   fix of a published vulnerability in an action therefore waits for the minimum
   release age like any other update.
-- The Renovate app hosted by Mend is a third-party GitHub App with write access
-  to code, workflows, pull requests, checks and commit statuses of every
-  repository. Rulesets on `main` require pull requests but no approvals, and no
-  status checks yet ([FY-0022](0022-bootstrap.md)). Whoever controls the app
-  could open and merge a pull request, then merge the release pull request, and
-  `flakeyard-bot` would publish the result to every consumer.
+- The Renovate app hosted by Mend ([FY-0029](0029-renovate-mend.md)) is a
+  third-party GitHub App with write access to code, workflows, pull requests,
+  checks and commit statuses of every repository. Rulesets on `main` require
+  pull requests but no approvals, and no status checks yet
+  ([FY-0022](0022-bootstrap.md)). Whoever controls the app could open and merge
+  a pull request, then merge the release pull request, and `flakeyard-bot` would
+  publish the result to every consumer.
 
 [FY-0021](0021-release-bot.md) did not put required reviewers on the environment
 `release`, so that releases would not wait for a person. A third party with
