@@ -6,7 +6,7 @@ date: 2026-11-02
 supersedes: []
 superseded_by: []
 related:
-  [FY-0003, FY-0011, FY-0012, FY-0016, FY-0021, FY-0022, FY-0024, FY-0028]
+  [FY-0003, FY-0011, FY-0012, FY-0016, FY-0022, FY-0024, FY-0028, FY-0030]
 affects: [".github:org/**", "renovate-config:**", "*:renovate.json"]
 review_by:
 ---
@@ -25,7 +25,11 @@ Mend's documentation and the design of the presets established:
 - The app is installed on the organization. Installed on all repositories, it
   runs them in Silent mode, which only looks up updates and opens nothing. A
   repository or the whole organization is switched to Interactive mode in the
-  Mend Developer Portal, which has no API.
+  Mend Developer Portal, which has no API. The organization settings of the
+  portal for Renovate also decide whether it opens pull requests ("Automated
+  PRs"), whether it runs in a repository without a Renovate configuration
+  ("Require config file") and whether it opens onboarding pull requests ("Create
+  onboarding PRs"), for every repository of the organization.
 - In Interactive mode, a repository without a Renovate configuration gets an
   onboarding pull request with Mend's default configuration, unless the
   configuration says otherwise.
@@ -55,23 +59,32 @@ in its tests.
 
 ### Mode and onboarding
 
-The organization is in Interactive mode. `renovate-config` holds an
-`org-inherited-config.json` that only turns off onboarding, with keys such as
-`onboarding: false`, so that a repository gets no onboarding pull request and no
-Mend defaults. It contains no update rules: what is updated, when and how is
-decided only by the presets a repository pins in its own `renovate.json`. CI of
-`renovate-config` allows only the onboarding keys it lists in that file.
+The organization settings of Renovate in the Mend Developer Portal are the
+primary mechanism. The owner set them by hand:
+
+- Silent mode: off, so the organization is in Interactive mode;
+- Automated PRs: on;
+- Require config file: on, so a repository without `renovate.json` gets nothing;
+- Create onboarding PRs: off, so no repository gets Mend's default
+  configuration.
+
+`renovate-config` holds the same settings in code: its
+`org-inherited-config.json` contains only `onboarding: false` and
+`requireConfig: "required"`. The file is reviewed like any change and keeps the
+behaviour if the portal settings are reset; both say the same, so it does not
+matter which one Mend applies first. It contains no update rules: what is
+updated, when and how is decided only by the presets a repository pins in its
+own `renovate.json`. CI of `renovate-config` allows only the onboarding keys it
+lists in that file.
 
 Every repository gets `renovate.json` through an ordinary pull request that
 extends the presets by the tag of a release ([FY-0028](0028-supply-chain.md)).
 Renovate opens pull requests in it only after that.
 
-Whether Mend keeps `onboarding: false` from the inherited configuration in
-Interactive mode is checked by a probe in a temporary repository before the
-first repository adopts the presets, and this record is updated with the result.
-If it does not, the organization stays in Silent mode, the file is not created,
-and each repository is switched to Interactive by hand after its `renovate.json`
-is merged; `org/README.md` lists that step for every new repository.
+If Mend ever ignored both, the organization would go back to Silent mode and
+each repository would be switched to Interactive by hand after its
+`renovate.json` is merged; `org/README.md` would list that step for every new
+repository.
 
 ### Installation check
 
@@ -89,9 +102,10 @@ stays under "Not covered" in `org/README.md`
 
 The app can write to every repository, so the environment `release` of every
 released repository requires the approval of the organization owner
-([FY-0028](0028-supply-chain.md)). `apply.sh` sets the reviewer. Every run of
-the release workflow that uses the environment waits for that approval,
-including runs that only update the release pull request.
+([FY-0028](0028-supply-chain.md)). `apply.sh` sets the reviewer. Only the job
+that creates a release or moves tags uses the environment and waits for that
+approval; runs that only update the release pull request do not
+([FY-0030](0030-actions-workflows-and-release-bot.md)).
 
 ### Renovate version
 
@@ -130,8 +144,10 @@ Whether the presets constrain the Nix that Mend uses is decided with that probe.
 - Renovate MUST NOT open pull requests in a repository before its own
   `renovate.json`, extending a flakeyard preset, is merged, and MUST NOT onboard
   a repository with Mend's default configuration.
-- Mode changes in the Mend Developer Portal MUST be listed in `org/README.md`
-  under "Not covered".
+- The organization settings of Renovate in the Mend Developer Portal MUST be
+  Silent mode off, Automated PRs on, Require config file on and Create
+  onboarding PRs off, and MUST be listed in `org/README.md` under "Not covered".
+  `org-inherited-config.json` MUST state the same onboarding settings.
 - The environment `release` of every released repository MUST have the
   organization owner as its required reviewer, set by `apply.sh`.
 - Presets MUST set every rule required by an `FY` ADR explicitly and MUST NOT
@@ -141,14 +157,15 @@ Whether the presets constrain the Nix that Mend uses is decided with that probe.
 
 - (+) No Renovate to host, upgrade or pay runner minutes for, and no flakeyard
   token with access to every repository.
-- (+) A new repository needs no manual step in the Mend Developer Portal, if the
-  probe confirms the inherited configuration.
+- (+) A new repository needs no manual step in the Mend Developer Portal: the
+  organization settings and the inherited configuration apply to it.
 - (+) A change of the app's installation or permissions fails `settings.sh`
   instead of passing unnoticed.
 - (−) A third party holds write access to every repository; the reviewer on
   `release` keeps it from publishing, not from opening or merging pull requests.
-- (−) Every release run waits for the owner, also when only the release pull
-  request is updated.
+- (−) Every release waits for the owner.
+- (−) The portal settings have no API; `settings.sh` cannot check them, and a
+  change there shows up only in Renovate's behaviour.
 - (−) The Renovate version, the schedule of runs and the build environment of
   lock files are Mend's; a new version can change defaults without a release of
   the presets.
@@ -163,12 +180,14 @@ Whether the presets constrain the Nix that Mend uses is decided with that probe.
 - **Self-hosted Renovate in GitHub Actions.** Its version would come from
   `flake.lock` and it could run any post-upgrade command, but it needs a token
   with write access to code, workflows and pull requests of every repository.
-  `flakeyard-bot` would need permissions [FY-0021](0021-release-bot.md) does not
-  grant, or a second App would need a key to protect, and flakeyard would
-  maintain the runs and pay their minutes.
+  `flakeyard-bot` would need permissions
+  [FY-0030](0030-actions-workflows-and-release-bot.md) does not grant, or a
+  second App would need a key to protect, and flakeyard would maintain the runs
+  and pay their minutes.
 - **The organization in Silent mode, each repository switched to Interactive by
   hand.** No inherited configuration, but a manual step without an API for every
-  new repository; kept as the fallback if the probe fails.
+  new repository; kept as the fallback if Mend ignores the organization
+  settings.
 - **Update rules in `org-inherited-config.json`.** One place for every
   repository, but the rules would apply from the default branch of
   `renovate-config` without a release and without a pin

@@ -14,11 +14,11 @@ related:
     FY-0011,
     FY-0013,
     FY-0016,
-    FY-0020,
     FY-0021,
     FY-0022,
     FY-0024,
     FY-0029,
+    FY-0030,
   ]
 affects:
   [
@@ -41,13 +41,13 @@ compromise of every consumer that updates.
 
 Several decisions already close parts of this: pull requests and signatures on
 `main` ([FY-0007](0007-branching-and-releases.md)), SHA references and no
-untrusted interpolation in actions ([FY-0020](0020-actions-and-workflows.md)),
-pushes to the binary cache only from protected branches
-([FY-0009](0009-ci-on-runners.md)), the release bot and its key
-([FY-0021](0021-release-bot.md)), settings applied from code
-([FY-0011](0011-settings-as-code.md)). What is missing is how consumers verify
-what they receive, how dependencies of flakeyard are updated and how the posture
-is measured.
+untrusted interpolation in actions
+([FY-0030](0030-actions-workflows-and-release-bot.md)), pushes to the binary
+cache only from protected branches ([FY-0009](0009-ci-on-runners.md)), the
+release bot and its key ([FY-0030](0030-actions-workflows-and-release-bot.md)),
+settings applied from code ([FY-0011](0011-settings-as-code.md)). What is
+missing is how consumers verify what they receive, how dependencies of flakeyard
+are updated and how the posture is measured.
 
 Renovate knows release dates only for some datasources, such as GitHub Actions
 and container images. Flake inputs follow branches or moving tags

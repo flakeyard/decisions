@@ -6,7 +6,7 @@
 
 _None._
 
-## Accepted (22)
+## Accepted (21)
 
 - [FY-0001](records/0001-record-decisions.md) Record architecture decisions of
   the organization (2026-10-21)
@@ -32,10 +32,6 @@ _None._
   (2026-10-22; supersedes FY-0004)
 - [FY-0019](records/0019-binary-cache.md) Binary cache (2026-10-22; review by
   2027-10-22)
-- [FY-0020](records/0020-actions-and-workflows.md) Deliver actions and reusable
-  workflows (2026-10-28; supersedes FY-0008)
-- [FY-0021](records/0021-release-bot.md) Release bot as a GitHub App
-  (2026-10-28; supersedes FY-0010)
 - [FY-0022](records/0022-bootstrap.md) Bootstrap order and temporary exceptions
   (2026-10-28; review by 2027-04-30)
 - [FY-0023](records/0023-setup-nix.md) Set up Nix on CI runners (2026-10-28)
@@ -49,12 +45,15 @@ _None._
   supersedes FY-0018)
 - [FY-0029](records/0029-renovate-mend.md) Run Renovate as the Mend-hosted app
   (2026-11-02)
+- [FY-0030](records/0030-actions-workflows-and-release-bot.md) Deliver actions
+  and workflows with a gated release bot (2026-11-02; supersedes FY-0020,
+  FY-0021)
 
 ## Rejected (0)
 
 _None._
 
-## Superseded (7)
+## Superseded (9)
 
 - [FY-0004](records/0004-atom-contract.md) Atom layout and composition contract
   (2026-10-22; superseded by FY-0017)
@@ -68,6 +67,10 @@ _None._
   superseded by FY-0018)
 - [FY-0018](records/0018-supply-chain.md) Secure the supply chain (2026-10-22;
   supersedes FY-0014; superseded by FY-0028)
+- [FY-0020](records/0020-actions-and-workflows.md) Deliver actions and reusable
+  workflows (2026-10-28; supersedes FY-0008; superseded by FY-0030)
+- [FY-0021](records/0021-release-bot.md) Release bot as a GitHub App
+  (2026-10-28; supersedes FY-0010; superseded by FY-0030)
 - [FY-0025](records/0025-publish-image.md) Publish the dev container image
   (2026-10-28; superseded by FY-0027)
 
