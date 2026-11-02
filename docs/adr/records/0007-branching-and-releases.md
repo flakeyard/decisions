@@ -14,6 +14,7 @@ affects:
     "*:.release-please-manifest.json",
     "*:CHANGELOG.md",
     "workflow-*:**",
+    "renovate-config:internal/**",
   ]
 review_by:
 ---
@@ -61,6 +62,11 @@ version; other types (`docs`, `chore`, `ci`, `refactor`, `test`, `build`,
 `perf`, `revert`) do not produce a release by themselves. The title is checked
 in CI.
 
+A dependency update that changes files consumers receive is a `fix`; one that
+changes only the repository's own CI is `ci`. Repositories whose CI uses each
+other's releases, such as `workflow-release` and `workflow-check`, would
+otherwise release each other in an endless loop.
+
 ### Releases
 
 Which repositories are released follows from
@@ -95,6 +101,8 @@ released repository.
   this decision, and CI MUST check them.
 - A breaking change of the public API MUST be marked with `!` or a
   `BREAKING CHANGE` footer.
+- A dependency update that changes only the repository's own CI MUST use the
+  type `ci`; one that changes files consumers receive MUST use `fix`.
 - Branches `release/vN` MUST be created only when major version `N + 1` is
   released, MUST receive only fixes cherry-picked from `main`, and MUST be
   protected by the same ruleset as `main`.
