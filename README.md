@@ -44,9 +44,7 @@ This repository is bootstrapped under
 remaining checks are released:
 
 - actionlint, zizmor, Prettier, markdownlint and typos run locally before every
-  pull request (provider: the atoms);
-- rulesets require no status checks until every repository has adopted
-  workflow-check.
+  pull request (provider: the atoms).
 
 ## License
 
