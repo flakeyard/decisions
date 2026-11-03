@@ -40,11 +40,12 @@ per concern; the helpers are not run on their own:
 - `apply.sh` applies repository settings to every repository, or to the
   repositories it is given: merge settings, labels, topics, rulesets, the
   environment `release`, secret scanning with push protection, Dependabot
-  alerts, private vulnerability reporting, immutable releases and CodeQL.
+  alerts, private vulnerability reporting, immutable releases and CodeQL default
+  setup, the last in every repository that has a commit.
 
 Repository-specific differences are derived only from repository name prefixes
-([FY-0003](0003-repository-naming.md)), such as topics per prefix or CodeQL for
-atoms and actions.
+([FY-0003](0003-repository-naming.md)), such as topics per prefix or the
+environment `release` for released repositories.
 
 An organization owner runs the scripts from their own machine after the change
 is merged, and runs `apply.sh` for every new repository before its first pull

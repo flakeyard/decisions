@@ -168,8 +168,9 @@ installation. Such an app must not be able to publish a release on its own:
 
 ### Detection
 
-- Every repository has secret scanning with push protection, Dependabot alerts
-  and private vulnerability reporting; atoms and actions have CodeQL.
+- Every repository has secret scanning with push protection, Dependabot alerts,
+  private vulnerability reporting and CodeQL default setup, enabled by
+  `apply.sh` ([FY-0011](0011-settings-as-code.md)).
 - Workflows are linted by actionlint and zizmor through `atom-workflows`.
 - Every repository runs OpenSSF Scorecard on a schedule and publishes its
   results, through the reusable workflow of `workflow-scorecard`
