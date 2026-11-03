@@ -43,14 +43,16 @@ This repository is bootstrapped under
 [FY-0022](docs/adr/records/0022-bootstrap.md). Until the providers of its
 remaining checks are released:
 
-- actionlint, zizmor, Prettier, markdownlint and typos run locally before every
-  pull request (provider: the atoms).
+- actionlint, zizmor, Prettier, markdownlint, typos and `reuse lint` run locally
+  before every pull request (provider: the atoms).
 
 ## License
 
 The text of the records is licensed under
 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), see
-[LICENSE](LICENSE).
+[LICENSE](LICENSE). The CI workflows and `renovate.json` are code, licensed
+under [MIT](LICENSES/MIT.txt) ([FY-0013](docs/adr/records/0013-licenses.md)).
+Licensing of every file is declared in [REUSE.toml](REUSE.toml).
 
 [workflow-check]: https://github.com/flakeyard/workflow-check
 [workflow-scorecard]: https://github.com/flakeyard/workflow-scorecard
