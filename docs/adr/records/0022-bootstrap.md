@@ -35,8 +35,10 @@ depends on it:
 1. `workflow-release`, which releases every repository;
 2. `action-setup-nix`, which installs Nix in CI;
 3. `image-devcontainer`, the development environment;
-4. `workflow-check`, then `workflow-scorecard`, then `action-flake-lock`, then
-   the atoms, starting with `atom-workflows`, and `renovate-config`.
+4. `renovate-config`, whose presets every `renovate.json` extends and
+   `workflow-check` checks;
+5. `workflow-check`, then `workflow-scorecard`;
+6. `action-flake-lock`, then the atoms, starting with `atom-workflows`.
 
 Until a repository's checks can come from released flakeyard products, the
 missing ones are replaced:

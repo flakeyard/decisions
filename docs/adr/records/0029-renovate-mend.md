@@ -40,9 +40,9 @@ Mend's documentation and the design of the presets established:
   holding back new major versions. Renovate's defaults change between versions.
   The presets are tested with the Renovate of their `flake.lock`
   ([FY-0012](0012-develop-in-container.md)), which can differ from Mend's.
-- The app has write access to code, workflows, pull requests, checks and commit
-  statuses of every repository it is installed on, and read access to
-  administration and members.
+- The app has write access to code, workflows, pull requests, issues, checks and
+  commit statuses of every repository it is installed on, and read access to
+  administration, packages, vulnerability alerts and members.
 - Active repositories run every 4 hours; onboarded repositories without merged
   Renovate pull requests run once a day.
 - For a flake input, Mend writes `flake.lock` with a Nix of its own build
@@ -90,12 +90,21 @@ repository.
 
 `org/organization/installations.json` in `.github` lists every GitHub App that
 must be installed on the organization: `renovate` and `flakeyard-bot`, each on
-all repositories, with the exact permissions it may have. `settings.sh` compares
-it with the installations of the organization in a separate step after every
-other setting is applied, and fails when an App is missing, suspended, not
-installed on all repositories or has other permissions. A permission change
-accepted in the web interface therefore shows up as drift. Installing the app
-stays under "Not covered" in `org/README.md`
+all repositories, with the exact permissions it may have. The permissions of
+`renovate` are those the app asks for:
+
+- read and write: contents, workflows, pull requests, issues, checks and commit
+  statuses;
+- read: administration, metadata, packages and vulnerability alerts;
+- organization, read: members.
+
+A permission the app asks for later is accepted only after this list and
+`installations.json` name it ([FY-0028](0028-supply-chain.md)). `settings.sh`
+compares `installations.json` with the installations of the organization in a
+separate step after every other setting is applied, and fails when an App is
+missing, suspended, not installed on all repositories or has other permissions.
+A permission change accepted in the web interface therefore shows up as drift.
+Installing the app stays under "Not covered" in `org/README.md`
 ([FY-0011](0011-settings-as-code.md)), marked as checked by `settings.sh`.
 
 ### Release environment
