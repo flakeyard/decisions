@@ -22,7 +22,9 @@ related:
 affects:
   [
     "workflow-check:**",
+    "workflow-scorecard:**",
     "*:.github/workflows/test.yaml",
+    "*:.github/workflows/scorecard.yaml",
     ".github:org/repository/rulesets/**",
   ]
 review_by:
@@ -76,6 +78,21 @@ A probe in a temporary repository established:
   sees the cancelled job and posts `failure`. The newer run of the same
   concurrency group waits until the cancelled run has finished, so its status is
   posted later.
+
+A second probe ran `ossf/scorecard-action` with `publish_results: true` in a
+reusable workflow, in the same repository and in another one:
+
+- Results were published for the calling repository and its SARIF reached the
+  caller's code scanning in both cases.
+- The signing identity is the called workflow file (`job_workflow_ref`). The
+  Scorecard server fetches that file at the ref the caller wrote and verifies
+  only it: no top-level `env` or `defaults`, no top-level write permissions,
+  `id-token: write` only on the Scorecard job, one Ubuntu runner, no container
+  or services, no job `env` or `defaults`, and only steps that use allowlisted
+  actions. The caller's file is not checked.
+- The analysed branch must be the repository's default branch.
+- A tag ref of the called workflow is accepted, but Scorecard counts it as an
+  unpinned action and the caller loses its Pinned-Dependencies points.
 
 ## Decision
 
@@ -148,11 +165,15 @@ and the push to the binary cache are added in later minor versions.
 
 Scorecard is not part of `check.yaml`: it runs on other events and needs
 `id-token: write` and `security-events: write`, which every pull request run
-would otherwise get. Each repository adds Scorecard in the pull request that
-adopts workflow-check. Whether it comes from a reusable workflow in a separate
-product or from a `scorecard.yaml` in every repository is open until a probe
-shows whether `ossf/scorecard-action` can publish results from a reusable
-workflow.
+would otherwise get, and the server rejects a workflow file with other jobs or
+steps. It comes from a separate product, `flakeyard/workflow-scorecard`, whose
+reusable workflow holds only the Scorecard job and meets the server's rules.
+
+Every repository calls it from its own workflow file, `scorecard.yaml`, pinned
+by full commit SHA, on `push` to the default branch, `schedule` and
+`workflow_dispatch`, with `contents: read`, `actions: read`,
+`security-events: write` and `id-token: write` on the calling job. Each
+repository adds it in the pull request that adopts workflow-check.
 
 ## Constraints
 
@@ -208,6 +229,18 @@ workflow.
 - `check.yaml` MUST require no secrets, no environment and no GitHub App, and
   MUST ask for no permissions beyond those listed in this decision.
 
+### Scorecard
+
+- The reusable workflow of `workflow-scorecard` MUST contain only the Scorecard
+  job and MUST meet the rules the Scorecard server verifies.
+- Every repository MUST run Scorecard from exactly one workflow,
+  `scorecard.yaml`, which MUST call `workflow-scorecard` pinned by full commit
+  SHA and MUST run only on the default branch, on `push`, `schedule` and
+  `workflow_dispatch`.
+- The calling job MUST have exactly the permissions `contents: read`,
+  `actions: read`, `security-events: write` and `id-token: write`, and the
+  workflow MUST have no top-level write permissions.
+
 ## Consequences
 
 - (+) The required-check logic and the status protocol live in one released
@@ -217,6 +250,8 @@ workflow.
 - (+) A job forgotten in `needs` fails the check instead of passing silently.
 - (+) A status posted by another workflow cannot unblock a pull request whose
   check run failed.
+- (+) The Scorecard job and its pins live in one product; a repository keeps
+  only a short caller.
 - (−) The checks of workflow-check start only after the caller's own jobs, so
   repositories with long own jobs wait longer.
 - (−) A dispatched run shows `pending` only when `check` starts, and none at all
@@ -243,4 +278,6 @@ workflow.
 - **Lint tools bundled in workflow-check.** A second owner of each tool and
   different versions in CI and local runs.
 - **Scorecard inside `check.yaml`.** Every pull request run would get the
-  permissions Scorecard needs.
+  permissions Scorecard needs, and the server would reject the file.
+- **A Scorecard job copied into every repository.** Works, but every repository
+  carries the job and its pins and updates them on its own.
