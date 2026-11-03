@@ -20,6 +20,7 @@ related:
     FY-0029,
     FY-0030,
     FY-0031,
+    FY-0032,
   ]
 affects:
   [
@@ -149,7 +150,9 @@ more.
 - Every published artifact, the image and any release asset, gets a build
   provenance attestation from `actions/attest-build-provenance`, and the image
   an SBOM attestation as well. Consumers verify them with
-  `gh attestation verify` against the `flakeyard` owner.
+  `gh attestation verify` against the `flakeyard` owner, and the manifest list
+  of an image also against the commit of its git tag
+  ([FY-0032](0032-publish-images-behind-an-approval.md)).
 - Git-only releases are consumed by commit SHA (atoms, actions, workflows) or by
   the tag of their immutable release (templates, the Renovate preset); the SHA
   or the release is what consumers verify.
@@ -163,6 +166,10 @@ installation. Such an app must not be able to publish a release on its own:
 - the environment `release` requires the approval of an organization owner
   before a job can use it, so no run obtains the key of `flakeyard-bot` without
   a person;
+- the environment `publish` of `image-*` repositories requires the same approval
+  before the release workflow pushes an image, and consumers bind an image to
+  its gated git tag when they verify it
+  ([FY-0032](0032-publish-images-behind-an-approval.md));
 - required status checks, when rulesets get them, name GitHub Actions as their
   source, so a commit status set by another app cannot satisfy them.
 
