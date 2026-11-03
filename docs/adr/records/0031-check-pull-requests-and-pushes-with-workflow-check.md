@@ -89,7 +89,8 @@ reusable workflow, in the same repository and in another one:
   only it: no top-level `env` or `defaults`, no top-level write permissions,
   `id-token: write` only on the Scorecard job, one Ubuntu runner, no container
   or services, no job `env` or `defaults`, and only steps that use allowlisted
-  actions. The caller's file is not checked.
+  actions. The caller's file is not checked. The rules are those of
+  `api/app/server/verify_workflow.go` in `ossf/scorecard-infra`.
 - The analysed branch must be the repository's default branch.
 - A tag ref of the called workflow is accepted, but Scorecard counts it as an
   unpinned action and the caller loses its Pinned-Dependencies points.
@@ -175,6 +176,15 @@ by full commit SHA, on `push` to the default branch, `schedule` and
 `security-events: write` and `id-token: write` on the calling job. Each
 repository adds it in the pull request that adopts workflow-check.
 
+`workflow-scorecard` itself does not call its product: its `scorecard.yaml` is
+the reusable workflow and also runs on `push`, `schedule` and
+`workflow_dispatch`, so the repository still has exactly one Scorecard workflow.
+
+The four permissions are those of a public repository. Scorecard asks for more
+read permissions in private repositories; flakeyard has none, and a private
+repository generated from a template keeps the four until a later version of
+this decision covers it.
+
 ## Constraints
 
 ### Caller
@@ -236,7 +246,8 @@ repository adds it in the pull request that adopts workflow-check.
 - Every repository MUST run Scorecard from exactly one workflow,
   `scorecard.yaml`, which MUST call `workflow-scorecard` pinned by full commit
   SHA and MUST run only on the default branch, on `push`, `schedule` and
-  `workflow_dispatch`.
+  `workflow_dispatch`. In `workflow-scorecard`, `scorecard.yaml` is the reusable
+  workflow itself and runs on these events instead of calling it.
 - The calling job MUST have exactly the permissions `contents: read`,
   `actions: read`, `security-events: write` and `id-token: write`, and the
   workflow MUST have no top-level write permissions.
