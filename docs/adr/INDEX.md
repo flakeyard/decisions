@@ -6,7 +6,7 @@
 
 _None._
 
-## Accepted (22)
+## Accepted (23)
 
 - [FY-0001](records/0001-record-decisions.md) Record architecture decisions of
   the organization (2026-10-21)
@@ -50,6 +50,8 @@ _None._
   Check pull requests and pushes with workflow-check (2026-11-02)
 - [FY-0032](records/0032-publish-images-behind-an-approval.md) Publish images
   behind an approval (2026-11-03; supersedes FY-0027)
+- [FY-0033](records/0033-custody-of-the-release-bot-key-and-audit-of-releases.md)
+  Custody of the release bot key and audit of releases (2026-11-03)
 
 ## Rejected (0)
 

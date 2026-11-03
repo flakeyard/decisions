@@ -19,6 +19,7 @@ related:
     FY-0028,
     FY-0029,
     FY-0031,
+    FY-0033,
   ]
 affects:
   [
@@ -222,8 +223,11 @@ repository permissions and no organization permissions:
 - pull requests, read and write: comments of release-please on merged release
   pull requests and template updates;
 - issues, read and write: labels that release-please sets on pull requests;
-- workflows, read and write: template updates that change workflow files;
 - metadata, read.
+
+It has no permission `workflows`: template updates that change workflow files do
+not exist yet, and the ADR that introduces them adds the permission back
+([FY-0033](0033-custody-of-the-release-bot-key-and-audit-of-releases.md)).
 
 Workflows obtain a token of the App for each job with
 `actions/create-github-app-token`, scoped to the current repository and to the
@@ -242,10 +246,12 @@ workflow skips pushes to `release/v0`. Only organization owners can create
 branches `release/v*`, so the branch policy cannot be met by a new branch.
 Organization settings as code create the environment, its branch policy, its
 reviewer and the rulesets; the key is set when a repository is set up and when
-the key is rotated. The key file is kept outside of any repository.
+the key is rotated.
 
 The private key is rotated once a year and at once when it may have been
-exposed; the old key is deleted as soon as the new one is in place.
+exposed; the old key is deleted as soon as the new one is in place. No copy of
+the key is kept, and releases are audited every week
+([FY-0033](0033-custody-of-the-release-bot-key-and-audit-of-releases.md)).
 
 The App is internal to flakeyard. Consumers bring their own App or none.
 
@@ -446,8 +452,7 @@ and the release workflow is referenced at the commit of one of its release tags.
   with the permissions of one job in one repository.
 - (+) Only approved jobs on protected branches can obtain the key; other
   workflows and pull request branches cannot.
-- (+) Releases start workflows, template updates change workflow files, and
-  commits of the App are signed.
+- (+) Releases start workflows, and commits of the App are signed.
 - (+) In flakeyard only releases and repairs of `vX` wait for the owner;
   ordinary merges do not.
 - (−) The approval is the only defence against a compromised app that can merge
@@ -463,8 +468,8 @@ and the release workflow is referenced at the commit of one of its release tags.
   statuses for their checks, and are authored by `github-actions[bot]`.
 - (−) GitHub Actions may approve pull requests in released repositories; the
   decision has to be revisited before rulesets require approvals.
-- (−) Template updates that change workflows still use `release` and wait for
-  the owner.
+- (−) Template updates that change workflows will need the permission
+  `workflows` back, will still use `release` and will wait for the owner.
 - (−) An action brings its own nixpkgs, so a project downloads tools that may
   already be in its own lock.
 - (−) Without an App, consumers who need `vX` must enable it, and consumers that
