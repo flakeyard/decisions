@@ -39,8 +39,6 @@ _None._
   policy (2026-10-28; supersedes FY-0006)
 - [FY-0026](records/0026-stable-nixpkgs.md) Follow a stable nixpkgs release
   (2026-10-29)
-- [FY-0027](records/0027-publish-image.md) Publish the dev container image
-  (2026-10-29; supersedes FY-0025)
 - [FY-0028](records/0028-supply-chain.md) Secure the supply chain (2026-11-02;
   supersedes FY-0018)
 - [FY-0029](records/0029-renovate-mend.md) Run Renovate as the Mend-hosted app
@@ -50,12 +48,14 @@ _None._
   FY-0021)
 - [FY-0031](records/0031-check-pull-requests-and-pushes-with-workflow-check.md)
   Check pull requests and pushes with workflow-check (2026-11-02)
+- [FY-0032](records/0032-publish-images-behind-an-approval.md) Publish images
+  behind an approval (2026-11-03; supersedes FY-0027)
 
 ## Rejected (0)
 
 _None._
 
-## Superseded (9)
+## Superseded (10)
 
 - [FY-0004](records/0004-atom-contract.md) Atom layout and composition contract
   (2026-10-22; superseded by FY-0017)
@@ -75,6 +75,8 @@ _None._
   (2026-10-28; supersedes FY-0010; superseded by FY-0030)
 - [FY-0025](records/0025-publish-image.md) Publish the dev container image
   (2026-10-28; superseded by FY-0027)
+- [FY-0027](records/0027-publish-image.md) Publish the dev container image
+  (2026-10-29; supersedes FY-0025; superseded by FY-0032)
 
 ## Deprecated (0)
 
