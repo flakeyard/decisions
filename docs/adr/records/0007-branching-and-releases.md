@@ -5,7 +5,7 @@ status: accepted
 date: 2026-10-22
 supersedes: []
 superseded_by: []
-related: [FY-0002, FY-0003, FY-0006]
+related: [FY-0002, FY-0003, FY-0006, FY-0024]
 affects:
   [
     ".github:org/repository/**",
@@ -56,11 +56,14 @@ The branch is protected like `main` and archived when support for `vN` ends.
 
 The title of a pull request follows
 [Conventional Commits](https://www.conventionalcommits.org/) and becomes the
-message of its squash commit. The type decides the next version: `fix` a patch,
-`feat` a minor version, `!` after the type or a `BREAKING CHANGE` footer a major
+message of its squash commit; the commit has no body. The type decides the next
+version: `fix` a patch, `feat` a minor version, `!` after the type a major
 version; other types (`docs`, `chore`, `ci`, `refactor`, `test`, `build`,
 `perf`, `revert`) do not produce a release by themselves. The title is checked
-in CI.
+in CI. A `BREAKING CHANGE` footer is not used: without a body it never reaches
+`main`, and release-please reads only the commits there. A breaking change is
+described in the pull request, and its migration guide goes into the release
+notes ([FY-0024](0024-versioning-and-support.md)).
 
 A dependency update that changes files consumers receive is a `fix`; one that
 changes only the repository's own CI is `ci`. Repositories whose CI uses each
@@ -99,8 +102,10 @@ released repository.
   checks before it is merged.
 - Pull request titles MUST follow Conventional Commits with the types listed in
   this decision, and CI MUST check them.
-- A breaking change of the public API MUST be marked with `!` or a
-  `BREAKING CHANGE` footer.
+- Squash commits MUST take the pull request title as their message and MUST have
+  no body.
+- A breaking change of the public API MUST be marked with `!` after the type in
+  the pull request title. A `BREAKING CHANGE` footer MUST NOT be relied on.
 - A dependency update that changes only the repository's own CI MUST use the
   type `ci`; one that changes files consumers receive MUST use `fix`.
 - Branches `release/vN` MUST be created only when major version `N + 1` is
