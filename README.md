@@ -1,5 +1,7 @@
 # decisions
 
+[![OpenSSF Scorecard][scorecard-badge]][scorecard-viewer]
+
 Architecture decisions of the [flakeyard](https://github.com/flakeyard)
 organization: why the atoms, actions, dev container image and templates work the
 way they do.
@@ -26,23 +28,37 @@ decisions.
 3. When the decision is made, the status changes to `accepted` or `rejected` and
    `docs/adr/INDEX.md` is regenerated.
 
+## CI
+
+[`test.yaml`](.github/workflows/test.yaml) calls
+[workflow-check][workflow-check], which checks pull request titles,
+`renovate.json` and the immutable release behind its preset tag
+([FY-0031][fy-0031]). The repository has no flake, so no flake checks are built.
+[`scorecard.yaml`](.github/workflows/scorecard.yaml) runs OpenSSF Scorecard
+through [workflow-scorecard][workflow-scorecard].
+
 ## Bootstrap
 
 This repository is bootstrapped under
-[FY-0022](docs/adr/records/0022-bootstrap.md). It has no CI checks yet. Until
-their providers are released:
+[FY-0022](docs/adr/records/0022-bootstrap.md). Until the providers of its
+remaining checks are released:
 
-- Prettier, markdownlint and typos run locally before every pull request
-  (provider: `workflow-check` and the atoms);
-- pull request titles are checked by the reviewer (provider: `workflow-check`);
-- rulesets require no status checks (provider: `workflow-check`);
-- CI does not check that the tag of the preset in `renovate.json` belongs to an
-  immutable release ([FY-0028](docs/adr/records/0028-supply-chain.md))
-  (provider: `workflow-check`);
-- OpenSSF Scorecard is not run (provider: `workflow-check`).
+- actionlint, zizmor, Prettier, markdownlint and typos run locally before every
+  pull request (provider: the atoms);
+- rulesets require no status checks until every repository has adopted
+  workflow-check.
 
 ## License
 
 The text of the records is licensed under
 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), see
 [LICENSE](LICENSE).
+
+[workflow-check]: https://github.com/flakeyard/workflow-check
+[workflow-scorecard]: https://github.com/flakeyard/workflow-scorecard
+[fy-0031]:
+  docs/adr/records/0031-check-pull-requests-and-pushes-with-workflow-check.md
+[scorecard-badge]:
+  https://api.scorecard.dev/projects/github.com/flakeyard/decisions/badge
+[scorecard-viewer]:
+  https://scorecard.dev/viewer/?uri=github.com/flakeyard/decisions
