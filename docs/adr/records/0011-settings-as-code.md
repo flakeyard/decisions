@@ -39,9 +39,9 @@ per concern; the helpers are not run on their own:
   of workflows from external contributors, retention, no self-hosted runners).
 - `apply.sh` applies repository settings to every repository, or to the
   repositories it is given: merge settings, labels, topics, rulesets, the
-  environment `release`, secret scanning with push protection, Dependabot
-  alerts, private vulnerability reporting, immutable releases and CodeQL default
-  setup, the last in every repository that has a commit.
+  environments `release` and `publish`, secret scanning with push protection,
+  Dependabot alerts, private vulnerability reporting, immutable releases and
+  CodeQL default setup, the last in every repository that has a commit.
 
 `apply.sh` creates and updates the rulesets and environments that `org/`
 defines. Rulesets and environments of a repository that `org/` does not define

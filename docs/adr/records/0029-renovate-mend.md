@@ -6,7 +6,17 @@ date: 2026-11-02
 supersedes: []
 superseded_by: []
 related:
-  [FY-0003, FY-0011, FY-0012, FY-0016, FY-0022, FY-0024, FY-0028, FY-0030]
+  [
+    FY-0003,
+    FY-0011,
+    FY-0012,
+    FY-0016,
+    FY-0022,
+    FY-0024,
+    FY-0028,
+    FY-0030,
+    FY-0032,
+  ]
 affects: [".github:org/**", "renovate-config:**", "*:renovate.json"]
 review_by:
 ---
@@ -170,8 +180,11 @@ Whether the presets constrain the Nix that Mend uses is decided with that probe.
   organization settings and the inherited configuration apply to it.
 - (+) A change of the app's installation or permissions fails `settings.sh`
   instead of passing unnoticed.
-- (−) A third party holds write access to every repository; the reviewer on
-  `release` keeps it from publishing, not from opening or merging pull requests.
+- (−) A third party holds write access to every repository. The reviewer on
+  `release` keeps it from publishing a release, and the check of an image's
+  commit ([FY-0032](0032-publish-images-behind-an-approval.md)) from publishing
+  an image that verifies; neither keeps it from opening or merging pull
+  requests.
 - (−) Every release waits for the owner.
 - (−) The portal settings have no API; `settings.sh` cannot check them, and a
   change there shows up only in Renovate's behaviour.
