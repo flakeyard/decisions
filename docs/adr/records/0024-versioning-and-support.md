@@ -98,7 +98,11 @@ version, and a change of the implementation, is a major release.
   disabled and is enabled in the next major version.
 - **Major**: removals and incompatible changes. A feature is removed only after
   it was deprecated in a minor release of the previous major version. Every
-  major release comes with a migration guide in its release notes.
+  major release comes with a migration guide in its release notes. The
+  maintainer writes it there by hand after the release is created: squash
+  commits have no body ([FY-0007](0007-branching-and-releases.md)), so the
+  generated notes list only titles, and the notes of an immutable release can
+  still be edited.
 
 ### Support
 
@@ -117,7 +121,8 @@ state these rules for consumers and link here.
   released.
 - Tags `vX.Y.Z` and their releases MUST NOT be changed or deleted after
   publication. The notes of a release MAY be extended with references to
-  artifacts published for it, such as the digest of an image.
+  artifacts published for it, such as the digest of an image, and with the
+  migration guide of a major release.
 - The first release with compatibility guarantees MUST be `v1.0.0`. Releases
   `0.y.z` MUST be marked as pre-releases.
 - Every kind of repository MUST have its public API listed in an accepted `FY`
@@ -128,7 +133,8 @@ state these rules for consumers and link here.
   of Nix list incompatible changes, and otherwise with the level of the Nix
   update.
 - A breaking change of the public API MUST be released as a new major version,
-  and the major release MUST include a migration guide.
+  and the notes of the major release MUST include a migration guide, written
+  there by hand.
 - A feature MUST be deprecated in a minor release, with a warning in the channel
   of its kind, before a major release removes it.
 - A check, hook or rule that could fail a project that passed before MUST ship

@@ -43,6 +43,11 @@ per concern; the helpers are not run on their own:
   alerts, private vulnerability reporting, immutable releases and CodeQL default
   setup, the last in every repository that has a commit.
 
+`apply.sh` creates and updates the rulesets and environments that `org/`
+defines. Rulesets and environments of a repository that `org/` does not define
+are reported as warnings and kept, since deleting an environment deletes its
+secrets.
+
 Repository-specific differences are derived only from repository name prefixes
 ([FY-0003](0003-repository-naming.md)), such as topics per prefix or the
 environment `release` for released repositories.
@@ -61,7 +66,9 @@ Settings without an API, or that depend on external services, are listed in
   `.github/org/` and applied by `settings.sh` or `apply.sh`.
 - A setting MUST be changed by a pull request to `.github` first and applied
   after the merge. Changes made only in the web interface MUST be treated as
-  drift and are overwritten by the next run.
+  drift: the next run overwrites them, or reports what `org/` does not define.
+- `apply.sh` MUST NOT delete rulesets or environments that `org/` does not
+  define; it MUST report them as warnings.
 - Settings without an API MUST be listed in `org/README.md` with the manual
   steps.
 - The scripts MUST be idempotent and MUST be safe to run for all repositories at
@@ -84,6 +91,8 @@ Settings without an API, or that depend on external services, are listed in
 - (+) A new repository gets every protection with one command.
 - (−) Drift is found only when a script runs again; nothing detects a change
   made in the web interface.
+- (−) A ruleset or an environment removed from `org/` stays in the repositories
+  until an owner deletes it by hand after the warning.
 - (−) Applying settings depends on an owner running the scripts.
 - (±) Moving to a plan with organization rulesets would move part of `apply.sh`
   to `settings.sh`.

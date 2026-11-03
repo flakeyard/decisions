@@ -121,9 +121,14 @@ out code; only the job that builds the flake checks out the repository.
 The caller passes `toJSON(needs)` as the required input `needs` and lists every
 other job of its workflow in the `needs` of `check`. `required` treats a missing
 or malformed input as a failure, namespaces the caller's jobs apart from its own
-and also reads the jobs of the current run attempt from the API: a job outside
-`check / *` that has not completed is missing from `needs`, and a job that
-failed fails the check, listed or not. The caller job runs with
+and also reads the jobs of the current run attempt from the API. The jobs of the
+check workflow are `required` itself and the jobs that `required` needs, named
+`check / <id>`. Every other job of the attempt is the caller's, also one whose
+own name looks like `check / lint`. A caller's job that has not completed is
+missing from `needs`. A caller's job passes only when it succeeded, or when it
+was skipped and `caller-may-skip` names it, listed in `needs` or not. Jobs of
+the attempt are matched with `caller-may-skip` by their names without matrix
+values, so a job that may be skipped sets no `name:`. The caller job runs with
 `if: ${{ !cancelled() || github.event_name == 'workflow_dispatch' }}`, so that a
 superseded pull request run leaves no result and a dispatched run reports one on
 every outcome.
@@ -205,7 +210,13 @@ this decision covers it.
   `do_not_enforce_on_create` set to `true`.
 - `required` MUST fail when the input `needs` is missing or malformed, when a
   job in it did not succeed and is not allowed to be skipped, and when a job of
-  the run attempt outside `check / *` has not completed or did not succeed.
+  the run attempt outside the check workflow has not completed, or neither
+  succeeded nor was skipped with its name in `caller-may-skip`.
+- `required` MUST take as the jobs of the check workflow only `required` and the
+  jobs it needs, not every job named like `check / *`.
+- `caller-may-skip` MUST be matched with the names of the jobs of the attempt
+  without matrix values. A caller's job that may be skipped MUST NOT set
+  `name:`.
 - The context of the commit status MUST be derived from the job's own name
   through `job.check_run_id`, not from an input.
 

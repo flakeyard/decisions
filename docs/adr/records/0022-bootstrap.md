@@ -5,7 +5,19 @@ status: accepted
 date: 2026-10-28
 supersedes: []
 superseded_by: []
-related: [FY-0007, FY-0009, FY-0012, FY-0018, FY-0020, FY-0031]
+related:
+  [
+    FY-0007,
+    FY-0009,
+    FY-0012,
+    FY-0016,
+    FY-0018,
+    FY-0019,
+    FY-0020,
+    FY-0029,
+    FY-0030,
+    FY-0031,
+  ]
 affects:
   [
     "*:.github/workflows/**",
@@ -38,7 +50,33 @@ depends on it:
 4. `renovate-config`, whose presets every `renovate.json` extends and
    `workflow-check` checks;
 5. `workflow-check`, then `workflow-scorecard`;
-6. `action-flake-lock`, then the atoms, starting with `atom-workflows`.
+6. `action-flake-lock`;
+7. the push to the binary cache in `workflow-check`;
+8. the atoms, starting with `atom-workflows`;
+9. the templates;
+10. a decision about a second organization.
+
+Steps 6 to 10 are not designed yet. Each of them gets its own `FY` ADR before
+its code is written. These ADRs answer at least:
+
+- `action-flake-lock`: where its tools come from. Checking `flake.lock` is not
+  an API step, so [FY-0030](0030-actions-workflows-and-release-bot.md) does not
+  allow the runner's `bash`, `gh` and `jq` for it. Either the action installs
+  Nix with `action-setup-nix` first, which evaluates nothing, or FY-0030
+  changes.
+- The atoms: how the last minor release before a major one emits the warning of
+  [FY-0016](0016-pin-form.md), where that is recorded, who sets it, and how
+  release-please keeps it.
+- The cache push: which job pushes, which repositories get the environment
+  `cache`, and what pull requests rebuild without it, measured as
+  [FY-0019](0019-binary-cache.md) requires.
+- The templates: how an update reaches a project generated from a template,
+  since the Renovate app of Mend ([FY-0029](0029-renovate-mend.md)) does not run
+  the tasks of templates and the presets turn Copier off: who runs
+  `copier update`, who opens the pull request, and with which credential it
+  changes workflow files.
+- A second organization: whether it brings its own App, Mend installation, cache
+  and preset, or flakeyard products take the owner as a parameter.
 
 Until a repository's checks can come from released flakeyard products, the
 missing ones are replaced:
@@ -59,6 +97,8 @@ next pull request and removes the section.
 ## Constraints
 
 - Repositories MUST be bootstrapped in the order of this decision.
+- Each step from `action-flake-lock` on MUST have an accepted `FY` ADR before
+  its code is written.
 - A repository MAY omit a check required by another `FY` decision only while the
   flakeyard product that provides it is unreleased, and MUST then run the same
   tools locally before every pull request.
