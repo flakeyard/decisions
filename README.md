@@ -3,8 +3,8 @@
 [![OpenSSF Scorecard][scorecard-badge]][scorecard-viewer]
 
 Architecture decisions of the [flakeyard](https://github.com/flakeyard)
-organization: why the atoms, actions, dev container image and templates work the
-way they do.
+organization: the rules that bind its repositories and how its atoms, actions,
+dev container image and templates work together.
 
 - [Index of decisions](docs/adr/INDEX.md)
 - [How records are organized](docs/adr/README.md)
@@ -13,10 +13,12 @@ way they do.
 
 ## Scope
 
-A decision is recorded here when it affects more than one repository or the
-contract with consumers. Decisions about a single repository live in that
-repository's `docs/adr/` as `ADR-NNNN` and must not contradict accepted `FY`
-decisions.
+A decision is recorded here when it binds more than one repository or the
+organization itself: organization settings, trust, versioning, naming,
+conventions, and the contracts of families of repositories such as `atom-*` or
+`image-*`. The design of a single product, including its public API, lives in
+that product's repository under `docs/adr/` as `ADR-NNNN` and must not
+contradict accepted `FY` decisions.
 
 ## Proposing a decision
 
