@@ -10,7 +10,6 @@ affects:
   [
     "*:.github/workflows/test.yaml",
     "*:.github/workflows/scorecard.yaml",
-    "template-*:template/.github/workflows/**",
     "workflow-check:.github/workflows/check.yaml",
     "workflow-scorecard:**",
     ".github:org/repository/rulesets/**",
@@ -54,13 +53,12 @@ ADR-0001][workflow-check-adr-0001], following
 
 ### Check workflow
 
-Every flakeyard repository with CI, and every project generated from a flakeyard
-template, calls `.github/workflows/check.yaml` of `flakeyard/workflow-check`
-from `test.yaml` as the last job, with the id `check`. Its check run
-`check / required` is the only required status check of branch rulesets, with
-GitHub Actions as its source. When the caller's event is `workflow_dispatch`,
-the workflow posts the commit status of the run, as every check workflow does
-([FY-0030](0030-actions-workflows-and-release-bot.md)).
+Every flakeyard repository with CI calls `.github/workflows/check.yaml` of
+`flakeyard/workflow-check` from `test.yaml` as the last job, with the id
+`check`. Its check run `check / required` is the only required status check of
+branch rulesets, with GitHub Actions as its source. When the caller's event is
+`workflow_dispatch`, the workflow posts the commit status of the run, as every
+check workflow does ([FY-0030](0030-actions-workflows-and-release-bot.md)).
 
 The caller passes `toJSON(needs)` as the input `needs`, lists every other job of
 its workflow in the `needs` of `check`, and runs `check` with
@@ -101,10 +99,9 @@ after their release; until then it runs their checks as FY-0022 describes.
 
 ### Caller
 
-- Every repository with CI, and every project generated from a flakeyard
-  template, MUST call `check.yaml` from `test.yaml` as a job with the id `check`
-  and without `name:`, and that job MUST be the last one: no job MAY depend on
-  it.
+- Every repository with CI MUST call `check.yaml` from `test.yaml` as a job with
+  the id `check` and without `name:`, and that job MUST be the last one: no job
+  MAY depend on it.
 - The job `check` MUST list every other job of the workflow in `needs`, MUST
   pass `toJSON(needs)` as the input `needs` and MUST run with
   `if: ${{ !cancelled() || github.event_name == 'workflow_dispatch' }}`.
