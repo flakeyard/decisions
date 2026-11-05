@@ -5,7 +5,7 @@ status: accepted
 date: 2026-10-21
 supersedes: []
 superseded_by: []
-related: []
+related: [FY-0024]
 affects: ["*:docs/adr/**"]
 review_by:
 ---
@@ -19,19 +19,21 @@ span several of them: how atoms compose, how consumers pin versions, what the
 templates generate, how releases are trusted.
 
 A decision recorded in one repository is invisible from the others, and
-consumers need one place that explains why the product works the way it does.
-Repository-specific decisions still belong next to their code.
+consumers need one place that explains why the products work together the way
+they do. Decisions about a single product still belong next to its code.
 
 ## Decision
 
 Organization-wide decisions are recorded as ADRs in the `flakeyard/decisions`
 repository, under `docs/adr/`, with the ids `FY-NNNN`.
 
-A decision is organization-wide when it affects more than one repository or the
-contract with consumers: public options and outputs, inputs of actions and
-workflows, template questions, versioning, supported platforms, trust and
-licensing. Decisions that affect a single repository are recorded in that
-repository's `docs/adr/` with the ids `ADR-NNNN`.
+A decision is organization-wide when it binds more than one repository or the
+organization itself: organization settings, trust, versioning, naming,
+conventions, and the contracts of families of repositories, such as `atom-*` or
+`image-*`. The design of a single product, including its public API, is recorded
+in that product's repository, under `docs/adr/`, with the ids `ADR-NNNN` and the
+format of the records here. The versioning rules of
+[FY-0024](0024-versioning-and-support.md) apply to that API.
 
 An ADR is proposed by a pull request that adds it with the status `proposed`. It
 is accepted by changing the status to `accepted` in the same or a later pull
@@ -44,8 +46,10 @@ state the rules briefly and link to the ADR that explains them.
 
 ## Constraints
 
-- Decisions that affect more than one repository or the contract with consumers
-  MUST be recorded here as `FY-NNNN`.
+- Decisions that bind more than one repository or the organization itself MUST
+  be recorded here as `FY-NNNN`.
+- The design of a single product, including its public API, MUST be recorded in
+  that product's repository as `ADR-NNNN`.
 - Repository ADRs MUST NOT contradict an accepted `FY` ADR. A repository that
   needs to deviate MUST first get the `FY` ADR superseded.
 - Constraints of accepted `FY` ADRs MUST be followed by every repository of the
@@ -63,9 +67,12 @@ state the rules briefly and link to the ADR that explains them.
 
 ## Consequences
 
-- (+) One place explains the product to consumers and contributors.
+- (+) One place explains to consumers and contributors how the products work
+  together.
 - (+) Cross-repository rules are binding and can be checked against code.
 - (−) A change that spans repositories needs a pull request here first.
+- (±) The design of each product, including its public API, is explained in its
+  own repository.
 - (±) Policy documents duplicate the essence of some ADRs and must be kept in
   sync with them.
 
