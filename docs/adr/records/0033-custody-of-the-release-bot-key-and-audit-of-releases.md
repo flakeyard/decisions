@@ -46,6 +46,10 @@ GitHub Apps and secrets behave in ways that shape the answer:
 - A release made with the key is authored by the App, like a genuine one. Its
   tag, however, points to a commit that is not the merge commit of a release
   pull request, unless the attacker also merged one into a protected branch.
+- Rulesets require no approval, so the key can open, label and merge such a
+  pull request. It merges as the App: `merged_by` of the pull request is
+  `flakeyard-bot[bot]`, not the owner. The list of pull requests does not carry
+  `merged_by`; each pull request has to be read on its own.
 - Every flakeyard repository is public, so `GITHUB_TOKEN` of any repository can
   read the releases, tags and pull requests of all of them.
 
@@ -102,7 +106,9 @@ it checks that:
 - the commit of its tag is the merge commit of a merged pull request from the
   branch `release-please--branches--<base>` of the same repository into
   `<base>`, which is `main` or `release/vN` with `N >= 1`, labelled
-  `autorelease: tagged` ([FY-0007](0007-branching-and-releases.md)).
+  `autorelease: tagged` ([FY-0007](0007-branching-and-releases.md));
+- that pull request was merged by a reviewer of the environment `release`
+  (`org/repository/environments/release-reviewers.json` in `.github`).
 
 It does not check the moving tags `vX`; the runbook reviews them by hand. It
 reports every mismatch and then fails; a failed run is the alert. It reads with
@@ -138,8 +144,10 @@ adds it back.
   off only for that change. The version of a forged release MUST NOT be reused.
 - The release audit MUST run at least weekly and on `workflow_dispatch`, MUST
   cover every release `vX.Y.Z` of every non-archived repository, and MUST fail
-  on any release that was not made by `flakeyard-bot` or whose tag is not the
-  merge commit of a release pull request as described in this decision.
+  on any release that was not made by `flakeyard-bot`, whose tag is not the
+  merge commit of a release pull request as described in this decision, or
+  whose release pull request was not merged by a reviewer of the environment
+  `release`.
 - The release audit MUST use only a read-only `GITHUB_TOKEN`. Its logic MUST
   live in a script with unit tests, not in the workflow.
 - The release audit MUST NOT post commit statuses and MUST NOT be a required
@@ -158,9 +166,11 @@ adds it back.
   repository.
 - (−) The audit finds a forged release only after the fact; consumers may have
   merged it by then.
-- (−) The audit does not detect a forged release pull request that was merged
-  into a protected branch, nor forged tags `vX`, images or deleted releases;
-  step 4 of the runbook covers them by hand.
+- (+) A release pull request merged with a stolen key is found too, since the
+  App, not the owner, merged it.
+- (−) The audit does not detect a release pull request merged with the owner's
+  own stolen session, nor forged tags `vX`, images or deleted releases; step 4
+  of the runbook covers them by hand.
 - (±) Template updates that change workflow files need a new ADR before they can
   exist.
 
