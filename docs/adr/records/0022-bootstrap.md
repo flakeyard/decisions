@@ -56,14 +56,15 @@ depends on it:
 9. the templates;
 10. a decision about a second organization.
 
-Steps 6 to 10 are not designed yet. Each of them gets its own `FY` ADR before
+Steps 6 to 10 were not designed when this decision was made. Each of them gets
+an accepted ADR, in this repository or in the repository of the product, before
 its code is written. These ADRs answer at least:
 
 - `action-flake-lock`: where its tools come from. Checking `flake.lock` is not
   an API step, so [FY-0030](0030-actions-workflows-and-release-bot.md) does not
-  allow the runner's `bash`, `gh` and `jq` for it. Either the action installs
-  Nix with `action-setup-nix` first, which evaluates nothing, or FY-0030
-  changes.
+  allow the runner's `bash`, `gh` and `jq` for it. Answered in
+  [action-flake-lock ADR-0001][action-flake-lock-adr-0001]: `jq` and `gh` come
+  from the action's own flake, built with the Nix that is already on `PATH`.
 - The atoms: how the last minor release before a major one emits the warning of
   [FY-0016](0016-pin-form.md), where that is recorded, who sets it, and how
   release-please keeps it.
@@ -97,8 +98,8 @@ next pull request and removes the section.
 ## Constraints
 
 - Repositories MUST be bootstrapped in the order of this decision.
-- Each step from `action-flake-lock` on MUST have an accepted `FY` ADR before
-  its code is written.
+- Each step from `action-flake-lock` on MUST have an accepted ADR, in this
+  repository or in the repository of the product, before its code is written.
 - A repository MAY omit a check required by another `FY` decision only while the
   flakeyard product that provides it is unreleased, and MUST then run the same
   tools locally before every pull request.
@@ -126,3 +127,6 @@ next pull request and removes the section.
   use tools without the pinning the decisions require.
 - **Building everything before the first release.** No exceptions, but nothing
   could be tested in real use until the end.
+
+[action-flake-lock-adr-0001]:
+  https://github.com/flakeyard/action-flake-lock/blob/main/docs/adr/records/0001-check-flake-lock.md
