@@ -46,18 +46,19 @@ _None._
 - [FY-0030](records/0030-actions-workflows-and-release-bot.md) Deliver actions
   and workflows with a gated release bot (2026-11-02; supersedes FY-0020,
   FY-0021)
-- [FY-0031](records/0031-check-pull-requests-and-pushes-with-workflow-check.md)
-  Check pull requests and pushes with workflow-check (2026-11-02)
 - [FY-0032](records/0032-publish-images-behind-an-approval.md) Publish images
   behind an approval (2026-11-03; supersedes FY-0027)
 - [FY-0033](records/0033-custody-of-the-release-bot-key-and-audit-of-releases.md)
   Custody of the release bot key and audit of releases (2026-11-03)
+- [FY-0034](records/0034-check-every-repository-with-workflow-check.md) Check
+  every repository with workflow-check and workflow-scorecard (2026-11-05;
+  supersedes FY-0031)
 
 ## Rejected (0)
 
 _None._
 
-## Superseded (10)
+## Superseded (11)
 
 - [FY-0004](records/0004-atom-contract.md) Atom layout and composition contract
   (2026-10-22; superseded by FY-0017)
@@ -79,6 +80,9 @@ _None._
   (2026-10-28; superseded by FY-0027)
 - [FY-0027](records/0027-publish-image.md) Publish the dev container image
   (2026-10-29; supersedes FY-0025; superseded by FY-0032)
+- [FY-0031](records/0031-check-pull-requests-and-pushes-with-workflow-check.md)
+  Check pull requests and pushes with workflow-check (2026-11-02; superseded by
+  FY-0034)
 
 ## Deprecated (0)
 

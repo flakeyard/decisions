@@ -35,7 +35,7 @@ contradict accepted `FY` decisions.
 [`test.yaml`](.github/workflows/test.yaml) calls
 [workflow-check][workflow-check], which checks pull request titles,
 `renovate.json` and the immutable release behind its preset tag
-([FY-0031][fy-0031]). The repository has no flake, so no flake checks are built.
+([FY-0034][fy-0034]). The repository has no flake, so no flake checks are built.
 [`scorecard.yaml`](.github/workflows/scorecard.yaml) runs OpenSSF Scorecard
 through [workflow-scorecard][workflow-scorecard].
 
@@ -58,8 +58,7 @@ Licensing of every file is declared in [REUSE.toml](REUSE.toml).
 
 [workflow-check]: https://github.com/flakeyard/workflow-check
 [workflow-scorecard]: https://github.com/flakeyard/workflow-scorecard
-[fy-0031]:
-  docs/adr/records/0031-check-pull-requests-and-pushes-with-workflow-check.md
+[fy-0034]: docs/adr/records/0034-check-every-repository-with-workflow-check.md
 [scorecard-badge]:
   https://api.scorecard.dev/projects/github.com/flakeyard/decisions/badge
 [scorecard-viewer]:
