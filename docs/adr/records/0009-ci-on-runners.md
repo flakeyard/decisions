@@ -18,8 +18,8 @@ review_by:
 
 ## Context
 
-Developers work in the dev container image
-([FY-0005](0005-dev-container-image.md)), where the Nix sandbox is off and the
+Developers work in the dev container image ([image-devcontainer
+ADR-0001][image-devcontainer-adr-0001]), where the Nix sandbox is off and the
 store lives in the container. CI has different needs: builds must be isolated,
 results must be reproducible on every run, and only what a check needs should be
 downloaded. Atoms already separate tools for checks from tools for people:
@@ -41,9 +41,10 @@ downloads it.
 
 CI runs directly on GitHub-hosted runners, not in the dev container image. Nix
 is installed by `action-setup-nix` in multi-user mode with the sandbox on and no
-fallback, with the same Nix implementation and minor version as the image. Every
-system a repository claims is built natively on a runner of that system; there
-is no emulation.
+fallback, with the same Nix implementation and minor version as the image. A job
+runs it once, on a runner where Nix was not installed before; jobs that already
+have Nix do not use it. Every system a repository claims is built natively on a
+runner of that system; there is no emulation.
 
 CI runs only checks and apps: `nix flake check` or builds of `checks.<system>`,
 and `nix run .#<app>`. It never enters a development shell, so it downloads only
@@ -56,7 +57,9 @@ There are three levels of caching:
 - **Public binary caches, read everywhere.** Every run substitutes from
   `cache.nixos.org` and, in flakeyard repositories, from the flakeyard Cachix
   cache. Consumers opt in to the flakeyard cache; by default `action-setup-nix`
-  trusts only `cache.nixos.org`.
+  trusts only `cache.nixos.org`. Workflows add caches only through its inputs
+  `extra-substituters` and `extra-trusted-public-keys`; flake `nixConfig`,
+  `--option` and the user's `nix.conf` cannot add them.
 - **Push to Cachix only from protected branches.** After all checks pass on
   `main` or `release/v*`, a separate job pushes the paths the repository built
   itself. The push token is a secret of a GitHub environment that only these
@@ -85,6 +88,8 @@ name the same check in every repository regardless of its matrix.
 - Nix in CI MUST be installed by `action-setup-nix` with `sandbox = true` and
   `sandbox-fallback = false`, and with the Nix implementation and minor version
   of the image.
+- A job MUST run `action-setup-nix` at most once and only on a runner where Nix
+  was not installed before.
 - Every system a repository claims MUST be built natively. CI MUST NOT emulate
   other architectures.
 - CI MUST run only checks and apps and MUST NOT use `nix develop` or development
@@ -94,6 +99,8 @@ name the same check in every repository regardless of its matrix.
 ### Binary cache
 
 - Substituters other than `cache.nixos.org` MUST be opt-in for consumers.
+- Workflows MUST add substituters and keys only through the inputs
+  `extra-substituters` and `extra-trusted-public-keys` of `action-setup-nix`.
 - Pushing to the binary cache MUST happen only from `main` and `release/v*`,
   after all checks pass, in a separate job.
 - The push token MUST be a secret of a GitHub environment restricted to `main`
@@ -145,3 +152,6 @@ name the same check in every repository regardless of its matrix.
   configuration; not needed while builds of flakeyard are small.
 - **Required checks per job.** Every matrix change would need a settings change
   in every repository.
+
+[image-devcontainer-adr-0001]:
+  https://github.com/flakeyard/image-devcontainer/blob/main/docs/adr/records/0001-dev-container-image.md

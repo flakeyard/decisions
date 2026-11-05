@@ -37,9 +37,9 @@ A stable branch, `nixos-YY.MM`, receives only fixes and security updates. A new
 one is released every May and November and is supported for about seven months,
 until the end of the following June or December. `nixos-26.05` contains
 `nixVersions.nix_2_35`, the Nix minor version of the image and of
-`action-setup-nix` ([FY-0009](0009-ci-on-runners.md),
-[FY-0023](0023-setup-nix.md)), and builds every tool the image needs on both
-architectures.
+`action-setup-nix` ([FY-0009](0009-ci-on-runners.md), [action-setup-nix
+ADR-0001][action-setup-nix-adr-0001]), and builds every tool the image needs on
+both architectures.
 
 ## Decision
 
@@ -119,3 +119,6 @@ README and removes the input once the branch is fixed.
   still breaks when the image's own packages fail.
 - **An older `nixos-unstable` commit.** Works until the next update needs a
   commit where everything builds again.
+
+[action-setup-nix-adr-0001]:
+  https://github.com/flakeyard/action-setup-nix/blob/main/docs/adr/records/0001-set-up-nix-on-ci-runners.md
