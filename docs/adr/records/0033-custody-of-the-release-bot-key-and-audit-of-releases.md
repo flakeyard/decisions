@@ -46,8 +46,8 @@ GitHub Apps and secrets behave in ways that shape the answer:
 - A release made with the key is authored by the App, like a genuine one. Its
   tag, however, points to a commit that is not the merge commit of a release
   pull request, unless the attacker also merged one into a protected branch.
-- Rulesets require no approval, so the key can open, label and merge such a
-  pull request. It merges as the App: `merged_by` of the pull request is
+- Rulesets require no approval, so the key can open, label and merge such a pull
+  request. It merges as the App: `merged_by` of the pull request is
   `flakeyard-bot[bot]`, not the owner. The list of pull requests does not carry
   `merged_by`; each pull request has to be read on its own.
 - Every flakeyard repository is public, so `GITHUB_TOKEN` of any repository can
@@ -145,8 +145,8 @@ adds it back.
 - The release audit MUST run at least weekly and on `workflow_dispatch`, MUST
   cover every release `vX.Y.Z` of every non-archived repository, and MUST fail
   on any release that was not made by `flakeyard-bot`, whose tag is not the
-  merge commit of a release pull request as described in this decision, or
-  whose release pull request was not merged by a reviewer of the environment
+  merge commit of a release pull request as described in this decision, or whose
+  release pull request was not merged by a reviewer of the environment
   `release`.
 - The release audit MUST use only a read-only `GITHUB_TOKEN`. Its logic MUST
   live in a script with unit tests, not in the workflow.
