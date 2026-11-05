@@ -6,7 +6,7 @@ date: 2026-11-03
 supersedes: []
 superseded_by: []
 related:
-  [FY-0007, FY-0011, FY-0024, FY-0028, FY-0029, FY-0030, FY-0031, FY-0032]
+  [FY-0007, FY-0011, FY-0024, FY-0028, FY-0029, FY-0030, FY-0032, FY-0034]
 affects:
   [
     ".github:org/README.md",
@@ -120,9 +120,9 @@ tests against a stub of `gh`; the workflow only runs it.
 
 The audit checks the organization, not a commit. It is therefore not a check
 workflow in the sense of FY-0030 and
-[FY-0031](0031-check-pull-requests-and-pushes-with-workflow-check.md): the
-commit status protocol of dispatched runs does not apply to it, it posts no
-commit status, and no ruleset requires it.
+[FY-0034](0034-check-every-repository-with-workflow-check.md): the commit status
+protocol of dispatched runs does not apply to it, it posts no commit status, and
+no ruleset requires it.
 
 ### Permissions of the App
 

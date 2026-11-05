@@ -19,8 +19,8 @@ related:
     FY-0024,
     FY-0029,
     FY-0030,
-    FY-0031,
     FY-0032,
+    FY-0034,
   ]
 affects:
   [
@@ -181,9 +181,9 @@ installation. Such an app must not be able to publish a release on its own:
 - Workflows are linted by actionlint and zizmor through `atom-workflows`.
 - Every repository runs OpenSSF Scorecard on a schedule and publishes its
   results, through the reusable workflow of `workflow-scorecard`
-  ([FY-0031](0031-check-pull-requests-and-pushes-with-workflow-check.md));
-  findings are fixed or recorded as accepted with a reason, such as Code-Review
-  while one maintainer merges their own pull requests.
+  ([FY-0034](0034-check-every-repository-with-workflow-check.md)); findings are
+  fixed or recorded as accepted with a reason, such as Code-Review while one
+  maintainer merges their own pull requests.
 
 ## Constraints
 

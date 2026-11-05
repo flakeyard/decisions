@@ -1,10 +1,10 @@
 ---
 id: FY-0031
 title: Check pull requests and pushes with workflow-check
-status: accepted
+status: superseded
 date: 2026-11-02
 supersedes: []
-superseded_by: []
+superseded_by: [FY-0034]
 related:
   [
     FY-0003,
@@ -29,6 +29,10 @@ affects:
   ]
 review_by:
 ---
+
+> **Superseded by [FY-0034](0034-check-every-repository-with-workflow-check.md)
+> for the organization and by [workflow-check ADR-0001][workflow-check-adr-0001]
+> for the design of the workflow.**
 
 ## Context
 
@@ -303,3 +307,6 @@ this decision covers it.
   permissions Scorecard needs, and the server would reject the file.
 - **A Scorecard job copied into every repository.** Works, but every repository
   carries the job and its pins and updates them on its own.
+
+[workflow-check-adr-0001]:
+  https://github.com/flakeyard/workflow-check/blob/main/docs/adr/records/0001-check-pull-requests-and-pushes.md
