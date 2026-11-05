@@ -19,7 +19,13 @@ docs/adr/
 - **rejected**: considered and declined; kept so the question is not reopened
   blindly.
 - **superseded**: replaced; `superseded_by` points to the replacement.
-- **deprecated**: no longer relevant, nothing replaces it.
+- **deprecated**: no longer relevant here; nothing in this repository replaces
+  it.
+
+A record whose decision moved to the repository of its product is
+**deprecated**, because `superseded_by` names only `FY` records. Its banner
+links to the record that replaces it there, by full URL, and names the `FY`
+records that took over its rules for other repositories.
 
 ## Title
 

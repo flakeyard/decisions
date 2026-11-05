@@ -1,7 +1,7 @@
 ---
 id: FY-0005
 title: Dev container image
-status: accepted
+status: deprecated
 date: 2026-10-22
 supersedes: []
 superseded_by: []
@@ -14,6 +14,10 @@ affects:
   ]
 review_by:
 ---
+
+> **Moved to [image-devcontainer ADR-0001][image-devcontainer-adr-0001], which
+> supersedes it. Its rules for consumers and templates moved to
+> [FY-0012](0012-develop-in-container.md).**
 
 ## Context
 
@@ -228,3 +232,6 @@ permissions of their outputs.
   `docker run` would still stop slowly and leak zombie processes.
 - **One image per project with the project shell inside.** Starts instantly but
   needs a new image for every lock update.
+
+[image-devcontainer-adr-0001]:
+  https://github.com/flakeyard/image-devcontainer/blob/main/docs/adr/records/0001-dev-container-image.md

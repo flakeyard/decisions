@@ -1,7 +1,7 @@
 ---
 id: FY-0023
 title: Set up Nix on CI runners
-status: accepted
+status: deprecated
 date: 2026-10-28
 supersedes: []
 superseded_by: []
@@ -9,6 +9,10 @@ related: [FY-0005, FY-0009, FY-0019, FY-0020, FY-0024]
 affects: ["action-setup-nix:**", "*:.github/workflows/**"]
 review_by:
 ---
+
+> **Moved to [action-setup-nix ADR-0001][action-setup-nix-adr-0001], which
+> supersedes it. Its rules for the workflows that use the action moved to
+> [FY-0009](0009-ci-on-runners.md).**
 
 ## Context
 
@@ -204,3 +208,6 @@ an update of the runner images can break the action without a release.
   the reverse change would be breaking.
 - **The token in `NIX_CONFIG` through the job environment.** Simpler, but it
   would reach every later step and every action they call.
+
+[action-setup-nix-adr-0001]:
+  https://github.com/flakeyard/action-setup-nix/blob/main/docs/adr/records/0001-set-up-nix-on-ci-runners.md

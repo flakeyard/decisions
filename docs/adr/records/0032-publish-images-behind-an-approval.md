@@ -26,8 +26,8 @@ review_by:
 The dev container image is published to `ghcr.io/flakeyard/image-devcontainer`
 as one manifest list for `linux/amd64` and `linux/arm64`, with immutable tags
 `vX.Y.Z`, a moving tag `vX` and provenance attestations; consumers reference it
-by digest ([FY-0005](0005-dev-container-image.md)). It needs an SBOM with the
-license of every package ([FY-0013](0013-licenses.md),
+by digest ([image-devcontainer ADR-0001][image-devcontainer-adr-0001]). It needs
+an SBOM with the license of every package ([FY-0013](0013-licenses.md),
 [FY-0028](0028-supply-chain.md)), and its publication runs in the workflow run
 of the release commit ([FY-0030](0030-actions-workflows-and-release-bot.md)).
 
@@ -336,3 +336,6 @@ The repository checks that the same commit yields the same image:
 - **A separate workflow triggered by the release tag.** Tags created with
   `GITHUB_TOKEN` start no workflows, and FY-0030 requires publication in the run
   of the release commit.
+
+[image-devcontainer-adr-0001]:
+  https://github.com/flakeyard/image-devcontainer/blob/main/docs/adr/records/0001-dev-container-image.md

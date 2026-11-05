@@ -6,7 +6,7 @@
 
 _None._
 
-## Accepted (23)
+## Accepted (21)
 
 - [FY-0001](records/0001-record-decisions.md) Record architecture decisions of
   the organization (2026-10-21)
@@ -14,8 +14,6 @@ _None._
   one repository per concern (2026-10-22)
 - [FY-0003](records/0003-repository-naming.md) Name repositories by delivery
   mechanism (2026-10-22)
-- [FY-0005](records/0005-dev-container-image.md) Dev container image
-  (2026-10-22)
 - [FY-0007](records/0007-branching-and-releases.md) Branching and releases
   (2026-10-22)
 - [FY-0009](records/0009-ci-on-runners.md) Run CI on hosted runners (2026-10-22)
@@ -34,7 +32,6 @@ _None._
   2027-10-22)
 - [FY-0022](records/0022-bootstrap.md) Bootstrap order and temporary exceptions
   (2026-10-28; review by 2027-04-30)
-- [FY-0023](records/0023-setup-nix.md) Set up Nix on CI runners (2026-10-28)
 - [FY-0024](records/0024-versioning-and-support.md) Versioning and support
   policy (2026-10-28; supersedes FY-0006)
 - [FY-0026](records/0026-stable-nixpkgs.md) Follow a stable nixpkgs release
@@ -84,6 +81,8 @@ _None._
   Check pull requests and pushes with workflow-check (2026-11-02; superseded by
   FY-0034)
 
-## Deprecated (0)
+## Deprecated (2)
 
-_None._
+- [FY-0005](records/0005-dev-container-image.md) Dev container image
+  (2026-10-22)
+- [FY-0023](records/0023-setup-nix.md) Set up Nix on CI runners (2026-10-28)

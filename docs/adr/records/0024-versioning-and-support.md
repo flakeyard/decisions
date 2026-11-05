@@ -31,20 +31,21 @@ how long they may stay on an old major version.
 The products differ in what consumers depend on. An atom is a set of options,
 tools and checks ([FY-0017](0017-atom-contract.md)); an action or a reusable
 workflow is a set of inputs, outputs and permissions; the image is a user, an
-entrypoint and settings ([FY-0005](0005-dev-container-image.md)); a template is
-a set of questions and the files it generates; the Renovate preset is a set of
-update rules. A version scheme is useful only if each kind states what its
-compatibility covers.
+entrypoint and settings ([image-devcontainer
+ADR-0001][image-devcontainer-adr-0001]); a template is a set of questions and
+the files it generates; the Renovate preset is a set of update rules. A version
+scheme is useful only if each kind states what its compatibility covers.
 
 Atoms and the image run tools whose versions flakeyard does not control: atoms
 take every tool from the consumer's nixpkgs. A new warning or a new finding
 after a nixpkgs update cannot be prevented by an atom release.
 
 The image and `action-setup-nix` are different: each release fixes the Nix it
-installs ([FY-0005](0005-dev-container-image.md), [FY-0023](0023-setup-nix.md)),
-and consumers depend on its behaviour. Nix releases a new minor version every
-one or two months. Most of them keep compatibility; some remove deprecated
-features or change defaults, and their release notes say so.
+installs ([image-devcontainer ADR-0001][image-devcontainer-adr-0001],
+[action-setup-nix ADR-0001][action-setup-nix-adr-0001]), and consumers depend on
+its behaviour. Nix releases a new minor version every one or two months. Most of
+them keep compatibility; some remove deprecated features or change defaults, and
+their release notes say so.
 
 flakeyard is maintained by a small team, so it can support only a few release
 lines at once.
@@ -71,8 +72,9 @@ of each kind of repository is:
 - **Atoms**: as listed in [FY-0017](0017-atom-contract.md).
 - **Actions and reusable workflows**: inputs, outputs, secrets, required
   permissions and the events and runners they support; for `action-setup-nix`,
-  also as listed in [FY-0023](0023-setup-nix.md).
-- **Dev container image**: as listed in [FY-0005](0005-dev-container-image.md).
+  also as listed in [action-setup-nix ADR-0001][action-setup-nix-adr-0001].
+- **Dev container image**: as listed in [image-devcontainer
+  ADR-0001][image-devcontainer-adr-0001].
 - **Templates**: questions and their defaults, the layout of generated projects,
   the major versions of other flakeyard repositories they reference, and the
   minimum Copier version.
@@ -175,3 +177,8 @@ state these rules for consumers and link here.
   release lines than a small team can test and maintain.
 - **Support only for the latest release.** Consumers would have to migrate on
   the day of every major release.
+
+[image-devcontainer-adr-0001]:
+  https://github.com/flakeyard/image-devcontainer/blob/main/docs/adr/records/0001-dev-container-image.md
+[action-setup-nix-adr-0001]:
+  https://github.com/flakeyard/action-setup-nix/blob/main/docs/adr/records/0001-set-up-nix-on-ci-runners.md

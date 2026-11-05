@@ -7,18 +7,25 @@ supersedes: []
 superseded_by: []
 related: [FY-0004, FY-0005, FY-0009]
 affects:
-  ["*:.devcontainer/**", "*:.envrc", "*:README.md", ".github:CONTRIBUTING.md"]
+  [
+    "*:.devcontainer/**",
+    "*:.envrc",
+    "*:README.md",
+    ".github:CONTRIBUTING.md",
+    "template-*:template/.devcontainer/**",
+  ]
 review_by:
 ---
 
 ## Context
 
 flakeyard publishes a dev container image so that people without Nix work as if
-they had it ([FY-0005](0005-dev-container-image.md)), and atoms provide the
-development shell of a project ([FY-0004](0004-atom-contract.md)). flakeyard's
-own repositories need formatters, linters and Nix too. Until the image and the
-atoms exist, they are developed with tools installed on the host, whose versions
-differ from machine to machine and from CI.
+they had it ([image-devcontainer ADR-0001][image-devcontainer-adr-0001]), and
+atoms provide the development shell of a project
+([FY-0004](0004-atom-contract.md)). flakeyard's own repositories need
+formatters, linters and Nix too. Until the image and the atoms exist, they are
+developed with tools installed on the host, whose versions differ from machine
+to machine and from CI.
 
 Developing flakeyard the way its consumers develop their projects tests the
 image, the atoms and the generated files every day, before consumers meet their
@@ -42,6 +49,13 @@ A container engine, git and an editor are the only things a contributor
 installs. Nix on the host is a supported alternative: `direnv` or `nix develop`
 give the same shell without the container.
 
+Projects generated from flakeyard templates reference the image the same way:
+templates emit `ghcr.io/flakeyard/image-devcontainer:vX@sha256:<digest>` and may
+add `postCreateCommand: direnv allow` and named volumes for state under the home
+directory that should survive recreation of the container, such as caches and
+editor servers. The smoke tests of the image run only in the image's own
+repository.
+
 Local verification runs the same commands as CI
 ([FY-0009](0009-ci-on-runners.md)): `nix flake check` and the repository's apps.
 The README of every repository says how to open it in the container and which
@@ -60,6 +74,10 @@ are developed in the previous release.
 - `devcontainer.json` MUST NOT repeat settings carried by the image's metadata,
   use Dev Containers features, mount host paths other than the workspace, or
   contain credentials or personal editor settings.
+- Consumers MUST reference the image by digest; templates MUST emit
+  `ghcr.io/flakeyard/image-devcontainer:vX@sha256:<digest>`.
+- Smoke tests of the image MUST run only in the image repository's CI and MUST
+  NOT be executed in consumer projects.
 - Tools MUST come from the repository's `flake.lock`. Instructions MUST NOT
   require installing tools on the host other than a container engine, git and an
   editor.
@@ -91,3 +109,6 @@ are developed in the previous release.
   image, and tools are pinned twice: in the image and in `flake.lock`.
 - **Hosted environments only, such as Codespaces.** Ties development to one
   service and its quotas.
+
+[image-devcontainer-adr-0001]:
+  https://github.com/flakeyard/image-devcontainer/blob/main/docs/adr/records/0001-dev-container-image.md
