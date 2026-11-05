@@ -223,10 +223,14 @@ repository permissions and no organization permissions:
 - pull requests, read and write: comments of release-please on merged release
   pull requests and template updates;
 - issues, read and write: labels that release-please sets on pull requests;
+- workflows, read and write: GitHub refuses a ref made by an App, such as the
+  tag of a release, whose commits carry workflow files unless the App may write
+  workflows, and the commits of every tag do; template updates that change
+  workflow files need it too;
 - metadata, read.
 
-It has no permission `workflows`: template updates that change workflow files do
-not exist yet, and the ADR that introduces them adds the permission back
+Its tokens ask for `workflows: write` in every job that creates a release or
+moves a tag
 ([FY-0033](0033-custody-of-the-release-bot-key-and-audit-of-releases.md)).
 
 Workflows obtain a token of the App for each job with

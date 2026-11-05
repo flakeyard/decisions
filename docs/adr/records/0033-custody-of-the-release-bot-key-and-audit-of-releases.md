@@ -53,9 +53,12 @@ GitHub Apps and secrets behave in ways that shape the answer:
 - Every flakeyard repository is public, so `GITHUB_TOKEN` of any repository can
   read the releases, tags and pull requests of all of them.
 
-FY-0030 also gave the App `workflows: write`, for template updates that change
-workflow files. No template updates exist yet, and a leaked key with that
-permission could change the workflows of every repository.
+FY-0030 also gave the App `workflows: write`. A leaked key with that permission
+could change the workflows of every repository, but the App cannot release
+without it: GitHub refuses a ref made by an App, such as the tag of a release,
+whose commits carry workflow files unless the App may write workflows, and the
+commits of every tag do. A release of image-devcontainer failed this way while
+the permission was removed.
 
 ## Decision
 
@@ -123,11 +126,11 @@ commit status, and no ruleset requires it.
 
 ### Permissions of the App
 
-`flakeyard-bot` loses the permission `workflows`. The owner removes it in the
-App settings, and `org/organization/installations.json` no longer lists it, so
-`settings.sh` reports an installation that still has it
-([FY-0029](0029-renovate-mend.md)). The ADR that introduces template updates
-adds it back.
+`flakeyard-bot` keeps the permission `workflows`, which releases need, and
+`org/organization/installations.json` lists it
+([FY-0029](0029-renovate-mend.md)). Its tokens ask for it only in the jobs that
+create releases or move tags, and the key custody, the gate and the audit above
+bound what a leaked key can do with it.
 
 ## Constraints
 
@@ -152,8 +155,6 @@ adds it back.
   live in a script with unit tests, not in the workflow.
 - The release audit MUST NOT post commit statuses and MUST NOT be a required
   check.
-- `flakeyard-bot` MUST NOT have the permission `workflows` until an accepted
-  `FY` ADR that introduces template updates grants it.
 
 ## Consequences
 
@@ -161,7 +162,8 @@ adds it back.
   job that runs, or the few minutes of a rotation.
 - (+) A release made with a stolen key from an arbitrary commit is found within
   a week, and the owner has a procedure for it.
-- (+) A leaked key can no longer change workflow files.
+- (−) A leaked key can change workflow files; the audit and the runbook are what
+  find and undo such changes.
 - (−) Every new released repository rotates the key of every released
   repository.
 - (−) The audit finds a forged release only after the fact; consumers may have
@@ -171,8 +173,6 @@ adds it back.
 - (−) The audit does not detect a release pull request merged with the owner's
   own stolen session, nor forged tags `vX`, images or deleted releases; step 4
   of the runbook covers them by hand.
-- (±) Template updates that change workflow files need a new ADR before they can
-  exist.
 
 ## Alternatives considered
 
@@ -183,5 +183,5 @@ adds it back.
   author; only the link to a merged release pull request tells them apart.
 - **The audit as a job of `workflow-check`.** It would run per commit in every
   repository, while the audit is about the organization.
-- **Keeping `workflows: write` for later.** Unused, and it widens what a leaked
-  key can do.
+- **Removing `workflows: write`.** Tried, and releases failed: GitHub refuses
+  the tag of a release made by an App without it.
