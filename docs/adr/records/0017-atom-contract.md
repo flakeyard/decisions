@@ -110,8 +110,9 @@ upstream flakes. A missing `follows` is reported in two places:
     inputs.treefmt-nix.follows = "treefmt-nix";
   ```
 
-- `action-flake-lock` checks `flake.lock` in CI before any evaluation and
-  reports duplicates the atoms cannot see, such as a second nixpkgs.
+- `action-flake-lock` checks `flake.lock` in CI before the project's flake is
+  evaluated and reports duplicates the atoms cannot see, such as a second
+  nixpkgs. The action evaluates only its own flake.
 
 ### Structure of an atom
 
@@ -172,12 +173,12 @@ not tested.
   inputs.
 - Consumers MUST deduplicate every input of every atom with `follows`. Every
   atom README MUST contain an "Inputs" section with the exact block.
-- Template-generated CI MUST run `action-flake-lock` before any Nix evaluation.
-  The check MUST compare normalized sources (case-insensitive host, owner and
-  repository, `dir`), treating `github:` and `git+https://github.com` as the
-  same source, MUST skip sources it cannot identify, MUST honour a list of
-  intentional duplicates and MUST print a `follows` line only when exactly one
-  root input matches.
+- Template-generated CI MUST run `action-flake-lock` before any evaluation of
+  the project's flake. The check MUST compare normalized sources
+  (case-insensitive host, owner and repository, `dir`), treating `github:` and
+  `git+https://github.com` as the same source, MUST skip sources it cannot
+  identify, MUST honour a list of intentional duplicates and MUST print a
+  `follows` line only when exactly one root input matches.
 
 ### Structure
 
