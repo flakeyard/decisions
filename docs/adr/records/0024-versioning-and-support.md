@@ -5,7 +5,8 @@ status: accepted
 date: 2026-10-28
 supersedes: [FY-0006]
 superseded_by: []
-related: [FY-0002, FY-0005, FY-0007, FY-0017, FY-0023, FY-0029, FY-0033]
+related:
+  [FY-0002, FY-0005, FY-0007, FY-0017, FY-0023, FY-0029, FY-0033, FY-0035]
 affects:
   [
     ".github:VERSIONING.md",
@@ -73,6 +74,11 @@ of each kind of repository is:
 - **Actions and reusable workflows**: inputs, outputs, secrets, required
   permissions and the events and runners they support; for `action-setup-nix`,
   also as listed in [action-setup-nix ADR-0001][action-setup-nix-adr-0001].
+- **Library actions**, in addition: the names of their functions, their
+  arguments and return codes, and the variables they read and write, as their
+  README documents them; `internal/testing/` is not part of it
+  ([FY-0035](0035-extract-logic-that-has-two-users.md)). A major release of a
+  library is not by itself a major release of its consumers.
 - **Dev container image**: as listed in [image-devcontainer
   ADR-0001][image-devcontainer-adr-0001].
 - **Templates**: questions and their defaults, the layout of generated projects,
