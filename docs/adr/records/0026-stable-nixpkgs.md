@@ -1,10 +1,10 @@
 ---
 id: FY-0026
 title: Follow a stable nixpkgs release
-status: accepted
+status: superseded
 date: 2026-10-29
 supersedes: []
-superseded_by: []
+superseded_by: [FY-0036]
 related: [FY-0005, FY-0009, FY-0016, FY-0017, FY-0023, FY-0024]
 affects:
   [
@@ -19,6 +19,9 @@ affects:
   ]
 review_by:
 ---
+
+> **Superseded by
+> [FY-0036](0036-check-the-end-of-life-of-nixpkgs-in-flake-lock.md).**
 
 ## Context
 
