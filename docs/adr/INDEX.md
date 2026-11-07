@@ -34,8 +34,6 @@ _None._
   (2026-10-28; review by 2027-04-30)
 - [FY-0024](records/0024-versioning-and-support.md) Versioning and support
   policy (2026-10-28; supersedes FY-0006)
-- [FY-0026](records/0026-stable-nixpkgs.md) Follow a stable nixpkgs release
-  (2026-10-29)
 - [FY-0028](records/0028-supply-chain.md) Secure the supply chain (2026-11-02;
   supersedes FY-0018)
 - [FY-0029](records/0029-renovate-mend.md) Run Renovate as the Mend-hosted app
@@ -52,12 +50,15 @@ _None._
   supersedes FY-0031)
 - [FY-0035](records/0035-extract-logic-that-has-two-users.md) Extract logic that
   has two users (2026-11-07)
+- [FY-0036](records/0036-check-the-end-of-life-of-nixpkgs-in-flake-lock.md)
+  Check the end of life of nixpkgs in flake.lock (2026-11-07; supersedes
+  FY-0026)
 
 ## Rejected (0)
 
 _None._
 
-## Superseded (11)
+## Superseded (12)
 
 - [FY-0004](records/0004-atom-contract.md) Atom layout and composition contract
   (2026-10-22; superseded by FY-0017)
@@ -77,6 +78,8 @@ _None._
   (2026-10-28; supersedes FY-0010; superseded by FY-0030)
 - [FY-0025](records/0025-publish-image.md) Publish the dev container image
   (2026-10-28; superseded by FY-0027)
+- [FY-0026](records/0026-stable-nixpkgs.md) Follow a stable nixpkgs release
+  (2026-10-29; superseded by FY-0036)
 - [FY-0027](records/0027-publish-image.md) Publish the dev container image
   (2026-10-29; supersedes FY-0025; superseded by FY-0032)
 - [FY-0031](records/0031-check-pull-requests-and-pushes-with-workflow-check.md)
