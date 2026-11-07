@@ -20,6 +20,7 @@ related:
     FY-0029,
     FY-0033,
     FY-0034,
+    FY-0035,
   ]
 affects:
   [
@@ -130,9 +131,11 @@ key check and the flag; everything else is unchanged.
 ### Actions
 
 An action is a composite action with one task. Its logic lives in scripts in its
-repository, and the tools it runs come from the action's own `flake.nix` and
-`flake.lock`, so a release of the action fixes the versions of its tools. Only
-`action-setup-nix` runs before Nix exists and pins its installer by hash.
+repository or in a library action it pins
+([FY-0035](0035-extract-logic-that-has-two-users.md)), and the tools it runs
+come from the action's own `flake.nix` and `flake.lock`, so a release of the
+action fixes its logic and the versions of its tools. Only `action-setup-nix`
+runs before Nix exists and pins its installer by hash.
 
 Building and evaluating the consumer's `checks` and `apps` is the task of a
 workflow or action, not a tool it runs; Nix for it comes from
@@ -211,7 +214,9 @@ input, off by default, because projects that nobody pins do not need it.
 ### Tests
 
 Actions and workflows are tested in the CI of their own repositories. Their
-tests and fixtures are not part of what consumers reference.
+tests and fixtures are not part of what consumers reference, except the shared
+test helpers in `internal/testing/` of a library action, which the tests of its
+consumers use at the pinned commit.
 
 ### flakeyard-bot
 
@@ -324,7 +329,8 @@ and the release workflow is referenced at the commit of one of its release tags.
 
 ### Action content
 
-- An action MUST be a composite action with one task.
+- An action MUST be a composite action with one task. Its logic MAY live in a
+  library action that it pins by full commit SHA.
 - An action MUST take its tools from its own `flake.lock`. It MUST NOT run tools
   from `nixpkgs#`, from the consumer's flake, or downloaded without a pinned
   hash. `action-setup-nix` MUST pin its installer by hash. Building or
@@ -441,7 +447,9 @@ and the release workflow is referenced at the commit of one of its release tags.
 ### Test isolation
 
 - Tests and fixtures of actions and workflows MUST run only in their own
-  repositories and MUST NOT be referenced by consumers.
+  repositories and MUST NOT be referenced by consumers, except
+  `internal/testing/` of a library action, which the tests of its consumers MAY
+  use.
 
 ## Consequences
 

@@ -5,7 +5,7 @@ status: accepted
 date: 2026-10-22
 supersedes: []
 superseded_by: []
-related: [FY-0002]
+related: [FY-0002, FY-0035]
 affects: [".github:org/**", "renovate-config:**", "template-*:template/**"]
 review_by:
 ---
@@ -31,7 +31,8 @@ The prefix of a repository name names its delivery mechanism:
 - `atom-`: a flake-parts module, consumed as a flake input, pinned by commit in
   `flake.nix`.
 - `action-`: a composite action, consumed by `uses:` in a workflow step, pinned
-  by commit SHA.
+  by commit SHA. A library action, which only exposes its directory of shared
+  code, is one too ([FY-0035](0035-extract-logic-that-has-two-users.md)).
 - `workflow-`: one reusable workflow, consumed by `uses:` in a workflow job,
   pinned by commit SHA.
 - `image-`: an OCI image, consumed by `image:` in `devcontainer.json`, pinned by
@@ -55,7 +56,9 @@ secrets and permissions are versioned independently of other workflows.
 - A repository consumed by projects MUST carry the prefix of the mechanism it is
   consumed through, from the list above.
 - A repository MUST deliver its product through exactly one mechanism. Other
-  outputs MAY exist only for its own development and tests.
+  outputs MAY exist only for its own development and tests. Tests of the
+  consumers of a library action MAY fetch its source at the commit their
+  `action.yml` pins; that is not a second mechanism.
 - A `workflow-` repository MUST contain exactly one reusable workflow.
 - The name after the prefix MUST be lowercase, hyphen-separated and MUST name a
   concern rather than a tool.
