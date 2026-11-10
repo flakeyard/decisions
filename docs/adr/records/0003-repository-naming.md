@@ -57,8 +57,8 @@ secrets and permissions are versioned independently of other workflows.
   consumed through, from the list above.
 - A repository MUST deliver its product through exactly one mechanism. Other
   outputs MAY exist only for its own development and tests. Tests of the
-  consumers of a library action MAY fetch its source at the commit their
-  `action.yml` pins; that is not a second mechanism.
+  consumers of a library action MAY fetch its source at the commit that their
+  `action.yml` or workflow pins; that is not a second mechanism.
 - A `workflow-` repository MUST contain exactly one reusable workflow.
 - The name after the prefix MUST be lowercase, hyphen-separated and MUST name a
   concern rather than a tool.
