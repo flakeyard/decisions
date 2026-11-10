@@ -65,7 +65,8 @@ Shell code shared at run time without Nix is delivered by a library action. It
 is an `action-` repository ([FY-0003](0003-repository-naming.md)) whose one task
 is to expose its directory, and its product is the files in that directory. The
 first one is `action-shell-lib`, designed in [action-shell-lib
-ADR-0001][action-shell-lib-adr-0001]. It runs one step:
+ADR-0001][action-shell-lib-adr-0001]. It runs one step on Linux and another on
+every other runner:
 
 ```yaml
 outputs:
@@ -76,10 +77,17 @@ runs:
   using: composite
   steps:
     - id: path
+      if: runner.os == 'Linux'
       shell: /usr/bin/bash --noprofile --norc -p -e {0}
       env:
         ACTION_DIR: ${{ github.action_path }}
       run: printf 'path=%s\n' "$ACTION_DIR" >>"$GITHUB_OUTPUT"
+    - if: runner.os != 'Linux'
+      shell: bash
+      run: |
+        echo "::error::Unsupported runner $RUNNER_OS: use a GitHub-hosted" \
+          "Linux runner, such as ubuntu-24.04 or ubuntu-24.04-arm."
+        exit 1
 ```
 
 A consumer pins it like any action, gives the step an `id`, passes the output to
@@ -98,19 +106,22 @@ that directory:
 A library brings no tools. Its functions use what the calling step provides: the
 tools of the consumer's flake, or the runner's `gh` and `jq` in API steps.
 
-The step of the library needs `/usr/bin/bash`, so it runs only on Linux. A
-consumer that rejects other runners does so before it calls the library, and the
-text it needs on those runners, such as the message of the rejection, stays in
-the consumer.
+The path step needs `/usr/bin/bash`, so it runs only on Linux. On every other
+runner the second step of the library, with the `bash` of the runner, writes the
+error of the rejection and fails the job. The text of the rejection lives in the
+library, and consumers do not reject runners other than Linux themselves.
 
 ### Tests of consumers
 
-The tests of a consumer may need the library without a runner that has resolved
-`uses:`. They fetch its source at the commit that the consumer's `action.yml`
-pins, and take that commit from `action.yml`, so there is one pin: with
+Every `uses:` of the library in one repository names the same commit. The tests
+of a consumer may need the library without a runner that has resolved `uses:`.
+They fetch its source at that commit and take the commit from the file that pins
+it, the consumer's `action.yml` or a workflow, so there is one pin: with
 `builtins.fetchGit { url; rev; shallow = true; }` in a development flake, or
-with `git fetch` of that commit in tests that run on a runner without Nix. This
-is not a second delivery mechanism.
+with `git fetch` of that commit in tests that run on a runner without Nix. A
+repository that uses the library only in its tests pins it in the job of its CI
+workflow that runs them, and takes the commit from there. This is not a second
+delivery mechanism.
 
 Shared test helpers live in `internal/testing/` of the library: harnesses, stubs
 of `gh` and `nix` and their fixtures. Consumers' tests may use them at the
@@ -198,15 +209,20 @@ This decision amends other records; the rest of each stays in force.
 - Shell code shared at run time without Nix MUST be delivered by a library
   action, an `action-` repository whose only task is to expose its directory.
 - A library action MUST expose its directory through one step with
+  `if: runner.os == 'Linux'` and
   `shell: /usr/bin/bash --noprofile --norc -p -e {0}` that writes
   `github.action_path`, passed through `env`, to `GITHUB_OUTPUT` as `path`.
+- A library action MUST reject runners other than Linux itself, in a second step
+  with `if: runner.os != 'Linux'` and `shell: bash` that writes an error and
+  exits 1.
 - A library action MUST NOT bring tools of its own.
-- Consumers MUST pin a library action like any other action, MUST pass its
-  output to their steps as `SHELL_LIB` and MUST call it only after rejecting
-  runners other than Linux. Text needed on other runners MUST NOT come from the
-  library.
-- Consumers' tests MAY fetch the library's source only at the commit pinned in
-  the consumer's `action.yml`, and MUST take that commit from it.
+- Consumers MUST pin a library action like any other action, every `uses:` of it
+  in one repository at the same commit, and MUST pass its output to their steps
+  as `SHELL_LIB`. Consumers MUST NOT reject runners other than Linux themselves.
+- Consumers' tests MAY fetch the library's source only at the pinned commit, and
+  MUST take that commit from the `action.yml` or workflow that pins it. A
+  repository that uses the library only in tests MUST pin it in the job of its
+  CI workflow that runs them.
 - Shell test helpers shared between repositories MUST live in
   `internal/testing/` of the library.
 
