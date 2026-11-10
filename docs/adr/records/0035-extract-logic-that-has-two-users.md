@@ -120,8 +120,11 @@ it, the consumer's `action.yml` or a workflow, so there is one pin: with
 `builtins.fetchGit { url; rev; shallow = true; }` in a development flake, or
 with `git fetch` of that commit in tests that run on a runner without Nix. A
 repository that uses the library only in its tests pins it in the job of its CI
-workflow that runs them, and takes the commit from there. This is not a second
-delivery mechanism.
+workflow that runs them, and takes the commit from there. When those tests run
+inside the flake checks of `workflow-check`, whose caller job has no steps of
+its own, the repository pins the library in a job of its own in the same
+workflow, which `check` needs, and the tests take the commit from that workflow.
+This is not a second delivery mechanism.
 
 Shared test helpers live in `internal/testing/` of the library: harnesses, stubs
 of `gh` and `nix` and their fixtures. Consumers' tests may use them at the
@@ -229,7 +232,9 @@ This decision amends other records; the rest of each stays in force.
 - Consumers' tests MAY fetch the library's source only at the pinned commit, and
   MUST take that commit from the `action.yml` or workflow that pins it. A
   repository that uses the library only in tests MUST pin it in the job of its
-  CI workflow that runs them.
+  CI workflow that runs them; when they run inside the flake checks of
+  `workflow-check`, it MUST pin it in a job of its own in the same workflow,
+  which `check` needs, and the tests MUST take the commit from that workflow.
 - Shell test helpers shared between repositories MUST live in
   `internal/testing/` of the library. The only exception is the loader of the
   library for local test runs: a consumer MAY keep one, which MUST do nothing
