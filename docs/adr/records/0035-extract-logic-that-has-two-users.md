@@ -128,6 +128,13 @@ of `gh` and `nix` and their fixtures. Consumers' tests may use them at the
 pinned commit. They are not public API, as the `internal/` presets of
 `renovate-config` are not ([FY-0024](0024-versioning-and-support.md)).
 
+The one exception to the rule is the loader of the library for local test runs.
+A loader cannot come from the library that it loads, so each consumer whose
+tests run locally keeps its own minimal one: unless `SHELL_LIB` is already set,
+it reads the commit from the file that pins it, fetches that commit once into a
+cache, such as `~/.cache/flakeyard/action-shell-lib/<commit>`, and sets
+`SHELL_LIB`. Everything else that the tests share comes from the library.
+
 ### Versions
 
 The public API of a library action is the names of its functions, their
@@ -224,7 +231,10 @@ This decision amends other records; the rest of each stays in force.
   repository that uses the library only in tests MUST pin it in the job of its
   CI workflow that runs them.
 - Shell test helpers shared between repositories MUST live in
-  `internal/testing/` of the library.
+  `internal/testing/` of the library. The only exception is the loader of the
+  library for local test runs: a consumer MAY keep one, which MUST do nothing
+  but, unless `SHELL_LIB` is set, read the pinned commit, fetch that commit once
+  into a cache and set `SHELL_LIB`.
 
 ### Versions and releases
 
