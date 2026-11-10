@@ -120,13 +120,23 @@ it, the consumer's `action.yml` or a workflow, so there is one pin: with
 `builtins.fetchGit { url; rev; shallow = true; }` in a development flake, or
 with `git fetch` of that commit in tests that run on a runner without Nix. A
 repository that uses the library only in its tests pins it in the job of its CI
-workflow that runs them, and takes the commit from there. This is not a second
-delivery mechanism.
+workflow that runs them, and takes the commit from there. When those tests run
+inside the flake checks of `workflow-check`, whose caller job has no steps of
+its own, the repository pins the library in a job of its own in the same
+workflow, which `check` needs, and the tests take the commit from that workflow.
+This is not a second delivery mechanism.
 
 Shared test helpers live in `internal/testing/` of the library: harnesses, stubs
 of `gh` and `nix` and their fixtures. Consumers' tests may use them at the
 pinned commit. They are not public API, as the `internal/` presets of
 `renovate-config` are not ([FY-0024](0024-versioning-and-support.md)).
+
+The one exception to the rule is the loader of the library for local test runs.
+A loader cannot come from the library that it loads, so each consumer whose
+tests run locally keeps its own minimal one: unless `SHELL_LIB` is already set,
+it reads the commit from the file that pins it, fetches that commit once into a
+cache, such as `~/.cache/flakeyard/action-shell-lib/<commit>`, and sets
+`SHELL_LIB`. Everything else that the tests share comes from the library.
 
 ### Versions
 
@@ -222,9 +232,14 @@ This decision amends other records; the rest of each stays in force.
 - Consumers' tests MAY fetch the library's source only at the pinned commit, and
   MUST take that commit from the `action.yml` or workflow that pins it. A
   repository that uses the library only in tests MUST pin it in the job of its
-  CI workflow that runs them.
+  CI workflow that runs them; when they run inside the flake checks of
+  `workflow-check`, it MUST pin it in a job of its own in the same workflow,
+  which `check` needs, and the tests MUST take the commit from that workflow.
 - Shell test helpers shared between repositories MUST live in
-  `internal/testing/` of the library.
+  `internal/testing/` of the library. The only exception is the loader of the
+  library for local test runs: a consumer MAY keep one, which MUST do nothing
+  but, unless `SHELL_LIB` is set, read the pinned commit, fetch that commit once
+  into a cache and set `SHELL_LIB`.
 
 ### Versions and releases
 
