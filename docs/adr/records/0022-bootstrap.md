@@ -17,6 +17,7 @@ related:
     FY-0029,
     FY-0030,
     FY-0034,
+    FY-0035,
   ]
 affects:
   [
@@ -55,6 +56,10 @@ depends on it:
 8. the atoms, starting with `atom-workflows`;
 9. the templates;
 10. a decision about a second organization.
+
+[FY-0035](0035-extract-logic-that-has-two-users.md) amends this order: it puts
+`action-shell-lib` before the steps that use it and lets duplicated Nix modules
+stay until their atoms are released.
 
 Steps 6 to 10 were not designed when this decision was made. Each of them gets
 an accepted ADR, in this repository or in the repository of the product, before

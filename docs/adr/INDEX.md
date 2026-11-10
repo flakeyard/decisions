@@ -6,7 +6,7 @@
 
 _None._
 
-## Accepted (21)
+## Accepted (22)
 
 - [FY-0001](records/0001-record-decisions.md) Record architecture decisions of
   the organization (2026-10-21)
@@ -50,6 +50,8 @@ _None._
 - [FY-0034](records/0034-check-every-repository-with-workflow-check.md) Check
   every repository with workflow-check and workflow-scorecard (2026-11-05;
   supersedes FY-0031)
+- [FY-0035](records/0035-extract-logic-that-has-two-users.md) Extract logic that
+  has two users (2026-11-07)
 
 ## Rejected (0)
 

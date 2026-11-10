@@ -5,7 +5,7 @@ status: accepted
 date: 2026-10-21
 supersedes: []
 superseded_by: []
-related: [FY-0024]
+related: [FY-0024, FY-0035]
 affects: ["*:docs/adr/**"]
 review_by:
 ---
@@ -39,7 +39,10 @@ An ADR is proposed by a pull request that adds it with the status `proposed`. It
 is accepted by changing the status to `accepted` in the same or a later pull
 request. Rejected ADRs are merged too, with the status `rejected`, so that the
 question is not reopened without new arguments. A decision is changed only by a
-new ADR that supersedes the old one.
+new ADR that supersedes the old one, or that amends it: the new ADR states in
+its own Decision and Constraints what it adds to the old one or which exception
+it makes, links it in `related`, and the rest of the old one stays in force
+([FY-0035](0035-extract-logic-that-has-two-users.md)).
 
 Policy documents for consumers, such as `VERSIONING.md` in `flakeyard/.github`,
 state the rules briefly and link to the ADR that explains them.
@@ -57,10 +60,11 @@ state the rules briefly and link to the ADR that explains them.
 - References to `FY` ADRs from other repositories MUST use the full id
   (`FY-NNNN`) and a link to the record.
 - ADRs MUST be changed through pull requests. An accepted ADR MUST NOT be edited
-  in substance; it is superseded instead. Typos, links and `affects` may be
-  corrected. Until every flakeyard product has released `v1.0.0`, a very small
-  change of substance MAY be made in place; larger changes MUST supersede the
-  ADR.
+  in substance; it is superseded or amended by a new ADR instead. An amending
+  ADR MUST state each amendment in its Decision and Constraints and MUST list
+  the amended ADR in `related`. Typos, links and `affects` may be corrected.
+  Until every flakeyard product has released `v1.0.0`, a very small change of
+  substance MAY be made in place; larger changes MUST supersede the ADR.
 - `affects` MUST name the governed code: path globs for this repository and
   `repository-glob:path-glob` for other repositories of the organization.
 - Records and policy documents MUST be written in English.
