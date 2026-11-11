@@ -158,8 +158,14 @@ then `action-setup-nix` and `action-flake-lock`, then `workflow-release` and
 `action-flake-lock`, so it takes all three updates in one release.
 
 Renovate proposes updates of `flakeyard/action-shell-lib` with the commit type
-`fix` in every consumer, through a rule of the presets of `renovate-config`
-([FY-0029](0029-renovate-mend.md)) that a later release of it adds.
+`fix` in consumers that ship the library to their users: actions, where it runs
+in `action.yml`, and reusable workflows, where it runs in the workflow their
+callers use. In repositories that use it only in their own CI or tests, such as
+`workflow-scorecard` and `image-devcontainer`, an update is `ci` like any other
+update of CI ([FY-0007](0007-branching-and-releases.md)). The rule for actions
+and workflows lives in their presets of `renovate-config`
+([FY-0029](0029-renovate-mend.md)); a workflow that uses the library only in its
+tests overrides it in its `renovate.json`.
 
 ### Trust
 
@@ -252,7 +258,8 @@ This decision amends other records; the rest of each stays in force.
   `action-shell-lib`, then `action-setup-nix` and `action-flake-lock`, then
   `workflow-release` and `workflow-check`.
 - Updates of `flakeyard/action-shell-lib` MUST be proposed with the commit type
-  `fix`.
+  `fix` in actions and reusable workflows that run the library for their users,
+  and with `ci` in repositories that use it only in their own CI or tests.
 
 ### Order and exceptions
 
