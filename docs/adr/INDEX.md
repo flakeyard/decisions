@@ -6,7 +6,7 @@
 
 _None._
 
-## Accepted (22)
+## Accepted (23)
 
 - [FY-0001](records/0001-record-decisions.md) Record architecture decisions of
   the organization (2026-10-21)
@@ -53,6 +53,8 @@ _None._
 - [FY-0036](records/0036-check-the-end-of-life-of-nixpkgs-in-flake-lock.md)
   Check the end of life of nixpkgs in flake.lock (2026-11-07; supersedes
   FY-0026)
+- [FY-0037](records/0037-atoms-ship-default-configs-that-projects-replace.md)
+  Atoms ship default configs that projects replace (2026-11-12)
 
 ## Rejected (0)
 
