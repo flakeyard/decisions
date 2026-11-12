@@ -5,7 +5,7 @@ status: accepted
 date: 2026-11-12
 supersedes: []
 superseded_by: []
-related: [FY-0015, FY-0017, FY-0019, FY-0024, FY-0035]
+related: [FY-0015, FY-0017, FY-0019, FY-0024, FY-0035, FY-0038]
 affects:
   [
     "atom-*:nix/**",

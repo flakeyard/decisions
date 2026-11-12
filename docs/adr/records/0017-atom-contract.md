@@ -5,7 +5,7 @@ status: accepted
 date: 2026-10-22
 supersedes: [FY-0004]
 superseded_by: []
-related: [FY-0002, FY-0003, FY-0016, FY-0037]
+related: [FY-0002, FY-0003, FY-0016, FY-0037, FY-0038]
 affects: ["atom-*:**", "action-flake-lock:**", "template-*:template/flake.nix*"]
 review_by:
 ---
