@@ -57,7 +57,8 @@ files. Until `atom-nix` is released, reviews check it.
 The repositories that already have such paths, `image-devcontainer`,
 `workflow-check`, `workflow-scorecard`, `renovate-config` and
 `action-flake-lock`, move to the root in one pull request each, without changing
-any derivation.
+any derivation except those whose source is the edited Nix files themselves,
+such as a formatting check.
 
 ## Constraints
 
@@ -69,7 +70,8 @@ any derivation.
 - An atom MUST define its root only in `nix/default.nix`, as `./..`, and MUST
   pass it to its other files as a function argument.
 - `atom-nix` MUST provide a hook that enforces this rule.
-- Moving existing code to the root MUST NOT change its derivations.
+- Moving existing code to the root MUST NOT change its derivations, except those
+  whose source is the edited Nix files themselves.
 
 ## Consequences
 
