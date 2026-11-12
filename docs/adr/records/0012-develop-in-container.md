@@ -37,7 +37,9 @@ Every flakeyard repository is developed in the flakeyard dev container image and
 gets its tools from its own `flake.lock`:
 
 - `.devcontainer/devcontainer.json` references
-  `ghcr.io/flakeyard/image-devcontainer` by tag and digest. It may add
+  `ghcr.io/flakeyard/image-devcontainer` by tag and digest, and mounts the
+  workspace under the home directory as the image's README requires, since the
+  image's metadata cannot carry the workspace mount. It may add
   `postCreateCommand: direnv allow` and named volumes for caches; everything
   else comes from the image's metadata.
 - `.envrc` contains `use flake`, or `use flake ./dev` in repositories whose
