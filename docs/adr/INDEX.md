@@ -6,7 +6,7 @@
 
 _None._
 
-## Accepted (23)
+## Accepted (24)
 
 - [FY-0001](records/0001-record-decisions.md) Record architecture decisions of
   the organization (2026-10-21)
@@ -55,6 +55,7 @@ _None._
   FY-0026)
 - [FY-0037](records/0037-atoms-ship-default-configs-that-projects-replace.md)
   Atoms ship default configs that projects replace (2026-11-12)
+- [FY-0038](records/0038-roll-out-the-atoms.md) Roll out the atoms (2026-11-12)
 
 ## Rejected (0)
 
