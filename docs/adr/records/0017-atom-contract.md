@@ -5,7 +5,7 @@ status: accepted
 date: 2026-10-22
 supersedes: [FY-0004]
 superseded_by: []
-related: [FY-0002, FY-0003, FY-0016]
+related: [FY-0002, FY-0003, FY-0016, FY-0037]
 affects: ["atom-*:**", "action-flake-lock:**", "template-*:template/flake.nix*"]
 review_by:
 ---
@@ -46,6 +46,8 @@ unrelated concerns (secret scanning with SBOM generation).
 This record replaces [FY-0004](0004-atom-contract.md). It adopts the pin form of
 [FY-0016](0016-pin-form.md), identifies sources regardless of the fetcher type
 and makes the formatting check substitutable; everything else is unchanged.
+[FY-0037](0037-atoms-ship-default-configs-that-projects-replace.md) adds how
+atoms ship and projects replace the configuration of tools.
 
 ## Decision
 
