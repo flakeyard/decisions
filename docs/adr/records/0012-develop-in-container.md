@@ -5,14 +5,16 @@ status: accepted
 date: 2026-10-22
 supersedes: []
 superseded_by: []
-related: [FY-0004, FY-0005, FY-0009]
+related: [FY-0004, FY-0005, FY-0009, FY-0017]
 affects:
   [
     "*:.devcontainer/**",
     "*:.envrc",
+    "*:.gitignore",
     "*:README.md",
     ".github:CONTRIBUTING.md",
     "template-*:template/.devcontainer/**",
+    "template-*:template/.gitignore*",
   ]
 review_by:
 ---
@@ -40,8 +42,10 @@ gets its tools from its own `flake.lock`:
   `ghcr.io/flakeyard/image-devcontainer` by tag and digest, and mounts the
   workspace under the home directory as the image's README requires, since the
   image's metadata cannot carry the workspace mount. It may add
-  `postCreateCommand: direnv allow` and named volumes for caches; everything
-  else comes from the image's metadata.
+  `postCreateCommand` with `direnv allow`, or with
+  `direnv allow && direnv exec . true` so that the git hooks are installed when
+  the container is created, and named volumes for caches; everything else comes
+  from the image's metadata.
 - `.envrc` contains `use flake`, or `use flake ./dev` in repositories whose
   public flake is not their development flake, such as atoms.
 - The development shell is built by `atom-workspace` from the atoms the
@@ -53,10 +57,23 @@ give the same shell without the container.
 
 Projects generated from flakeyard templates reference the image the same way:
 templates emit `ghcr.io/flakeyard/image-devcontainer:vX@sha256:<digest>` and may
-add `postCreateCommand: direnv allow` and named volumes for state under the home
+add the same `postCreateCommand` and named volumes for state under the home
 directory that should survive recreation of the container, such as caches and
 editor servers. The smoke tests of the image run only in the image's own
 repository.
+
+The shellHook of the development shell installs the git hooks
+([FY-0017](0017-atom-contract.md)): it writes `.pre-commit-config.yaml` and
+hooks that point to tools in the `/nix/store` of the container. Commits are
+therefore made inside the container, where those paths exist. direnv runs the
+shellHook only after `direnv allow`, once per worktree. The `.gitignore` of
+every repository and of every generated project contains `.direnv/` and
+`.pre-commit-config.yaml`, which the development shell writes.
+
+The shellHook of a branch runs whenever its development shell is entered, and
+the container holds forwarded git credentials and the SSH agent. Before an
+untrusted branch is checked out for review, the worktree is blocked with
+`direnv block`, so that the branch's code does not run on entry.
 
 Local verification runs the same commands as CI
 ([FY-0009](0009-ci-on-runners.md)): `nix flake check` and the repository's apps.
@@ -79,7 +96,15 @@ used host tools.
   `.devcontainer/devcontainer.json` that references the released image by tag
   and digest.
 - Every flakeyard repository with a development shell MUST contain `.envrc` that
-  loads it, and only then MAY its `devcontainer.json` run `direnv allow`.
+  loads it, and only then MAY its `devcontainer.json` run `direnv allow`. Its
+  `postCreateCommand` MAY be `direnv allow && direnv exec . true`.
+- The `.gitignore` of every flakeyard repository and of every project generated
+  from a flakeyard template MUST contain `.direnv/` and
+  `.pre-commit-config.yaml`.
+- Commits MUST be made inside the container when the git hooks were installed
+  there. Instructions MUST state that `direnv allow` is run once per worktree.
+- A worktree MUST be blocked with `direnv block` before an untrusted branch is
+  checked out in it for review.
 - `devcontainer.json` MUST NOT repeat settings carried by the image's metadata,
   use Dev Containers features, mount host paths other than the workspace, or
   contain credentials or personal editor settings.
