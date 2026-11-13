@@ -5,9 +5,15 @@ path = "**"
 SPDX-FileCopyrightText = "2026 Alexander Antipov"
 SPDX-License-Identifier = "CC-BY-4.0"
 
-# The CI of the repository, its dev container and its Renovate configuration
-# are code (FY-0013).
+# The CI of the repository, its dev container, its flake and its Renovate
+# configuration are code (FY-0013).
 [[annotations]]
-path = [".devcontainer/**", ".github/**", "renovate.json"]
+path = [
+  ".devcontainer/**",
+  ".github/**",
+  "flake.lock",
+  "flake.nix",
+  "renovate.json",
+]
 SPDX-FileCopyrightText = "2026 Alexander Antipov"
 SPDX-License-Identifier = "MIT"
