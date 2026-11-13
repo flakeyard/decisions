@@ -30,6 +30,15 @@ contradict accepted `FY` decisions.
 3. When the decision is made, the status changes to `accepted` or `rejected` and
    `docs/adr/INDEX.md` is regenerated.
 
+## Development
+
+Open the repository in its dev container,
+[`.devcontainer/devcontainer.json`](.devcontainer/devcontainer.json), with
+"Reopen in Container" in VS Code or `devcontainer up --workspace-folder .`. The
+checks of [CI](#ci) and [Bootstrap](#bootstrap) run in it as in CI; tools that
+the image does not have come from nixpkgs, such as `nix run nixpkgs#prettier`.
+Nix on the host works as well.
+
 ## CI
 
 [`test.yaml`](.github/workflows/test.yaml) calls
@@ -52,9 +61,10 @@ remaining checks are released:
 
 The text of the records is licensed under
 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), see
-[LICENSE](LICENSE). The CI workflows and `renovate.json` are code, licensed
-under [MIT](LICENSES/MIT.txt) ([FY-0013](docs/adr/records/0013-licenses.md)).
-Licensing of every file is declared in [REUSE.toml](REUSE.toml).
+[LICENSE](LICENSE). The CI workflows, the dev container configuration and
+`renovate.json` are code, licensed under [MIT](LICENSES/MIT.txt)
+([FY-0013](docs/adr/records/0013-licenses.md)). Licensing of every file is
+declared in [REUSE.toml](REUSE.toml).
 
 [workflow-check]: https://github.com/flakeyard/workflow-check
 [workflow-scorecard]: https://github.com/flakeyard/workflow-scorecard
