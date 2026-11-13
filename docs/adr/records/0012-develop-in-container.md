@@ -37,7 +37,9 @@ Every flakeyard repository is developed in the flakeyard dev container image and
 gets its tools from its own `flake.lock`:
 
 - `.devcontainer/devcontainer.json` references
-  `ghcr.io/flakeyard/image-devcontainer` by tag and digest. It may add
+  `ghcr.io/flakeyard/image-devcontainer` by tag and digest, and mounts the
+  workspace under the home directory as the image's README requires, since the
+  image's metadata cannot carry the workspace mount. It may add
   `postCreateCommand: direnv allow` and named volumes for caches; everything
   else comes from the image's metadata.
 - `.envrc` contains `use flake`, or `use flake ./dev` in repositories whose
@@ -61,16 +63,23 @@ Local verification runs the same commands as CI
 The README of every repository says how to open it in the container and which
 commands to run.
 
-Repositories are moved to this setup as soon as the image and the atoms they
-need are released. Until then, and for the first build of the image itself, host
-tools or a disposable container with Nix are used. Later versions of the image
-are developed in the previous release.
+Every repository gets `.devcontainer/devcontainer.json` as soon as the image is
+released, so that it is opened in the container from then on; Nix and the
+image's tools are there even before the repository has a development shell.
+`.envrc` and `postCreateCommand: direnv allow` come with the repository's
+development shell, which `atom-workspace` builds; without one, direnv would fail
+in the container. Until then, the commands of CI run in the container as they
+are. Repositories created later get both files with their first code. Later
+versions of the image are developed in the previous release; its first build
+used host tools.
 
 ## Constraints
 
-- Every flakeyard repository MUST contain `.devcontainer/devcontainer.json` that
-  references the image by tag and digest, and `.envrc` that loads the
-  repository's development flake, once the image and its atoms are released.
+- Every flakeyard repository with code MUST contain
+  `.devcontainer/devcontainer.json` that references the released image by tag
+  and digest.
+- Every flakeyard repository with a development shell MUST contain `.envrc` that
+  loads it, and only then MAY its `devcontainer.json` run `direnv allow`.
 - `devcontainer.json` MUST NOT repeat settings carried by the image's metadata,
   use Dev Containers features, mount host paths other than the workspace, or
   contain credentials or personal editor settings.
