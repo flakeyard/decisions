@@ -98,6 +98,14 @@ atoms do. Every other repository uses its root flake as its development flake.
 lists the checks of its atoms in the input `expect-checks` of `workflow-check`,
 so a removed import fails CI.
 
+`image-devcontainer` is the one exception. By the owner's decision of
+2026-11-02, made with
+[FY-0034](0034-check-every-repository-with-workflow-check.md), it builds its
+flake checks in its own job `image`, before the smoke tests. It passes an empty
+`flake` and no `expect-checks` to `workflow-check`, so `workflow-check` builds
+no flake checks; the `nix flake check` of the job `image` builds the checks of
+its atoms.
+
 ### Versions and updates
 
 Atoms are released by `workflow-release` with the moving tag, starting at
@@ -144,7 +152,10 @@ Atoms push nothing to the binary cache until step 7 of FY-0022 is decided.
 - A repository whose root flake is consumed by others MUST keep its development
   flake in `dev/`; every other repository MUST use its root flake.
 - Every repository MUST list the checks of the atoms it imports in
-  `expect-checks`.
+  `expect-checks`, except `image-devcontainer`. `image-devcontainer` MUST pass
+  an empty `flake` and no `expect-checks` to `workflow-check`, and the job
+  `image` of its `test.yaml` MUST run `nix flake check` on its flake, which
+  imports the atoms.
 - Atoms MUST be released with the moving tag `vX`. Repositories outside
   flakeyard MUST NOT be pointed to `0.y.z` releases by flakeyard templates or
   documentation.
