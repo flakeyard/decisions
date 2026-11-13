@@ -74,9 +74,9 @@ are:
 - `atom-commits`: commit messages. commitlint as a `commit-msg` hook, and an app
   for a commit range.
 - `atom-workspace`: the glue a project has once. It builds `devShells.default`,
-  installs the git hooks, enables the treefmt hook and sets global defaults such
-  as `treefmt.projectRootFile` and excludes for generated files. It has no
-  inputs, and other atoms do not know about it.
+  installs the git hooks, enables the treefmt hook, makes treefmt find the root
+  of the git work tree and sets global defaults such as excludes for generated
+  files. It has no inputs, and other atoms do not know about it.
 
 Updating projects from templates and generating SBOMs belong to actions, not
 atoms: both only make sense together with opening a pull request or uploading a
@@ -139,22 +139,58 @@ project overrides an atom without `mkForce`. Atoms take every tool package from
 the consumer's `pkgs` explicitly instead of relying on the package defaults of
 upstream modules.
 
+There are two exceptions:
+
+- List options that upstream defines at plain priority, such as
+  `treefmt.settings.excludes` and `pre-commit.settings.excludes`. The module
+  system merges only the definitions of the highest priority, so a list set at
+  900 next to upstream's plain definition is dropped without an error. Atoms set
+  such lists at plain priority, and the lists of upstream, atoms and the
+  consumer are concatenated.
+- `checks.treefmt`. treefmt-nix defines it at plain priority with
+  `runCommandLocal`, which sets `allowSubstitutes = false`. `atom-workspace`
+  replaces it with `lib.mkOverride 99`, so a consumer replaces it only with
+  `lib.mkForce`. `treefmt.flakeCheck = false` still removes it.
+
 ### Checks
 
 Every atom provides one check for its domain, `checks.<domain>`, that runs only
-its hooks over only its files. Changes outside the domain keep the check cached,
-and CI shows which domain failed. The aggregated `checks.pre-commit` of
-`git-hooks.nix` is disabled by `atom-workspace`. Formatting is checked by
-`checks.treefmt`, which `atom-workspace` makes substitutable, so that an
-unchanged tree is not checked again.
+its hooks over only its files. It is built with the public `lib.<system>.run` of
+git-hooks.nix from only the domain's hooks and the project's global
+`pre-commit.settings.excludes`, over the project's source filtered coarsely by
+the `files` patterns of those hooks. pre-commit applies `files`, `types` and
+`excludes` itself, exactly as the installed hook does locally, so the check and
+the hook select the same files and no atom implements file selection of its own
+([FY-0035](0035-extract-logic-that-has-two-users.md)). Tools that check the
+whole repository, such as reuse and gitleaks, set `always_run` and get the whole
+source. Changes outside the domain keep the check cached, and CI shows which
+domain failed. The aggregated `checks.pre-commit` of `git-hooks.nix` is disabled
+by `atom-workspace`. Formatting is checked by `checks.treefmt`, which
+`atom-workspace` makes substitutable, so that an unchanged tree is not checked
+again.
+
+`atom-workspace` sets `treefmt.projectRootFile` to `null`, so treefmt uses the
+root of the git work tree. Formatting then works from subdirectories, in
+checkouts and in worktrees, and `nix fmt` needs a git checkout.
 
 ### Development shell
 
 An atom with tools for people exposes them as `devShells.flakeyard-<atom>`.
-`atom-workspace` builds `devShells.default` from every `flakeyard-*` fragment. A
-fragment may bring a compiler through its `stdenv` and environment variables
-through `passthru.flakeyard.env`; the workspace accepts at most one compiler and
-fails on conflicting variables.
+`devShells.flakeyard-project` is reserved for the project's own tools.
+`atom-workspace` builds `devShells.default` from every `flakeyard-*` fragment,
+the project's included. A fragment may bring a compiler through its `stdenv` and
+environment variables through `passthru.flakeyard.env`; the workspace accepts at
+most one compiler and fails on conflicting variables.
+
+A fragment brings a compiler when its `stdenv.cc` is not `null`, so a fragment
+without a compiler is built with `mkShellNoCC` or another stdenv without one.
+Two fragments bring different compilers when their stdenvs are different
+derivations. The error names the fragments.
+
+The shellHook of `devShells.default` installs the git hooks: it runs
+`pre-commit.installationScript`, which writes `.pre-commit-config.yaml`, the
+hooks in `.git/hooks` and `core.hooksPath`. This is the only write of an atom
+into the working tree.
 
 ### Consumers
 
@@ -205,25 +241,52 @@ not tested.
   with `flakeyard-`. Names an atom adds to `apps`, `checks` and `devShells` MUST
   start with its domain or with `flakeyard-<atom>`.
 - Atoms MUST set only options of their own tools, with `lib.mkOverride 900`, and
-  MUST take tool packages from the consumer's `pkgs` explicitly.
+  MUST take tool packages from the consumer's `pkgs` explicitly. List options
+  that upstream defines at plain priority, such as `treefmt.settings.excludes`
+  and `pre-commit.settings.excludes`, MUST be set at plain priority instead, and
+  `checks.treefmt` as required under "Checks and platforms".
 - Only `atom-workspace` or the consumer MAY set `devShells.default`, the treefmt
-  hook, `treefmt.projectRootFile`, `treefmt.settings.global.*`,
-  `pre-commit.check.*`, `pre-commit.settings.excludes` and
-  `pre-commit.settings.default_stages`.
+  hook, `treefmt.projectRootFile`, `treefmt.settings.excludes`,
+  `treefmt.settings.on-unmatched`, `pre-commit.check.*`,
+  `pre-commit.settings.excludes` and `pre-commit.settings.default_stages`.
+- `atom-workspace` MUST set `treefmt.projectRootFile` to `null`.
 - Developer-only tools MUST be exposed only through
   `devShells.flakeyard-<atom>`. CI MUST NOT use `nix develop`.
+- No atom MAY define `devShells.flakeyard-project`; it is reserved for the
+  project's own tools. `atom-workspace` MUST include it in `devShells.default`
+  like every other `flakeyard-*` fragment.
+- A fragment without a compiler MUST be built with `mkShellNoCC` or another
+  stdenv whose `cc` is `null`. `atom-workspace` MUST treat a fragment as
+  bringing a compiler exactly when its `stdenv.cc` is not `null` and two
+  compilers as different exactly when the fragments' stdenvs are different
+  derivations. When fragments bring different compilers, it MUST fail with an
+  error that names them.
 
 ### Checks and platforms
 
 - Every atom with hooks MUST provide `checks.<domain>` over only its own files.
-- Every check MUST be substitutable. `atom-workspace` MUST override
-  `allowSubstitutes` and `preferLocalBuild` of `checks.treefmt` accordingly.
+- `checks.<domain>` MUST be built with `lib.<system>.run` of git-hooks.nix, with
+  only the domain's hooks and the project's `pre-commit.settings.excludes`. Its
+  source MUST be the project's source, filtered at most by the `files` patterns
+  of those hooks; hooks with `always_run` MUST get the whole source. Selection
+  by `files`, `types` and `excludes` MUST be left to pre-commit; atoms MUST NOT
+  select files in any other way.
+- Hooks of tools that check the whole repository, such as reuse and gitleaks,
+  MUST set `always_run`.
+- Every check MUST be substitutable. `atom-workspace` MUST define
+  `checks.treefmt` with `lib.mkOverride 99` as the check of treefmt-nix with
+  `allowSubstitutes = true` and `preferLocalBuild = false`, only while
+  `treefmt.flakeCheck` is true. A consumer MAY replace it only with
+  `lib.mkForce`, and MAY remove it with `treefmt.flakeCheck = false`.
 - Checks MUST run without network access. Work that needs the network or git
   history MUST be an app.
 - Formatters MUST be available on every supported system. Hooks and checks MAY
   be enabled per platform.
-- Atoms MUST NOT write into the working tree. Every file an atom reads MUST be
-  listed in its README.
+- Atoms MUST NOT write into the working tree. The only exception is the
+  shellHook of the `devShells.default` that `atom-workspace` builds: it MUST
+  install the git hooks with `pre-commit.installationScript`, which writes
+  `.pre-commit-config.yaml`, `.git/hooks` and `core.hooksPath`, and MUST NOT
+  write anything else. Every file an atom reads MUST be listed in its README.
 
 ### Public API
 
@@ -243,7 +306,11 @@ not tested.
 - (+) One copy of every upstream module, one nixpkgs and a small lock file.
 - (+) A missing `follows` is reported with the line that fixes it, locally and
   in CI.
-- (+) Projects override any value an atom sets with a plain definition.
+- (+) Projects override any value an atom sets with a plain definition, except
+  lists, which they extend, and `checks.treefmt`, which they replace with
+  `mkForce`.
+- (+) A check and the local hook of a domain select the same files, through
+  pre-commit itself.
 - (+) Per-domain checks are cached separately and name the failing domain; a
   cached check downloads none of its tools.
 - (−) Every atom costs one to two `follows` lines in every project.
