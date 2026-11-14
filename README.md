@@ -34,10 +34,17 @@ contradict accepted `FY` decisions.
 
 Open the repository in its dev container,
 [`.devcontainer/devcontainer.json`](.devcontainer/devcontainer.json), with
-"Reopen in Container" in VS Code or `devcontainer up --workspace-folder .`. The
-checks of [CI](#ci) and [Bootstrap](#bootstrap) run in it as in CI; tools that
-the image does not have come from nixpkgs, such as `nix run nixpkgs#prettier`.
-Nix on the host works as well.
+"Reopen in Container" in VS Code or `devcontainer up --workspace-folder .`.
+`direnv` loads the development shell of [`flake.nix`](flake.nix) through
+[`.envrc`](.envrc) ([FY-0012][fy-0012]): [atom-workspace][atom-workspace] joins
+the tools of the atoms, and installs the git hooks each time the shell starts.
+The container runs `direnv allow` when it is created; run it once in every other
+worktree, and run `direnv block` before you check out a branch you do not trust,
+since entering the directory runs that branch's shell hook. Commit inside the
+container, whose Nix store has the tools of the hooks. The checks of [CI](#ci)
+and [Bootstrap](#bootstrap) run in it as in CI; tools that the shell does not
+have come from nixpkgs, such as `nix run nixpkgs#prettier`. Nix on the host
+works as well: `direnv allow` or `nix develop` gives the same shell.
 
 ## CI
 
@@ -65,10 +72,10 @@ remaining checks are released:
 
 The text of the records is licensed under
 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), see
-[LICENSE](LICENSE). The CI workflows, the dev container configuration, the flake
-and `renovate.json` are code, licensed under [MIT](LICENSES/MIT.txt)
-([FY-0013](docs/adr/records/0013-licenses.md)). Licensing of every file is
-declared in [REUSE.toml](REUSE.toml).
+[LICENSE](LICENSE). The CI workflows, the dev container configuration, the
+flake, `.envrc`, `.gitignore` and `renovate.json` are code, licensed under
+[MIT](LICENSES/MIT.txt) ([FY-0013](docs/adr/records/0013-licenses.md)).
+Licensing of every file is declared in [REUSE.toml](REUSE.toml).
 
 [workflow-check]: https://github.com/flakeyard/workflow-check
 [workflow-scorecard]: https://github.com/flakeyard/workflow-scorecard
@@ -81,3 +88,5 @@ declared in [REUSE.toml](REUSE.toml).
   https://api.scorecard.dev/projects/github.com/flakeyard/decisions/badge
 [scorecard-viewer]:
   https://scorecard.dev/viewer/?uri=github.com/flakeyard/decisions
+[atom-workspace]: https://github.com/flakeyard/atom-workspace
+[fy-0012]: docs/adr/records/0012-develop-in-container.md
