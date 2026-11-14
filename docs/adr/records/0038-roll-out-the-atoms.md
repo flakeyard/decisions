@@ -94,9 +94,11 @@ A repository whose root flake is consumed by others, an atom or
 `action-flake-lock`, keeps its development flake in `dev/`, as FY-0012 lets
 atoms do. Every other repository uses its root flake as its development flake.
 `action-setup-nix`, `action-shell-lib`, `workflow-release`, `.github` and
-`decisions` get a root `flake.nix` that only imports atoms. Every repository
-lists the checks of its atoms in the input `expect-checks` of `workflow-check`,
-so a removed import fails CI.
+`decisions` get a root `flake.nix` that only imports atoms and, where the
+repository's tests need tools no atom provides, declares them in
+`devShells.flakeyard-project` (FY-0017). Every repository lists the checks of
+its atoms in the input `expect-checks` of `workflow-check`, so a removed import
+fails CI.
 
 `image-devcontainer` is the one exception. By the owner's decision of
 2026-11-02, made with
