@@ -54,10 +54,14 @@ titles, `renovate.json` and the immutable release behind its preset tag
 ([FY-0034][fy-0034]), and builds the checks of the root
 [`flake.nix`](flake.nix), which only imports atoms ([FY-0038][fy-0038]):
 [atom-workflows][atom-workflows] lints the workflows with actionlint and zizmor
-(`checks.workflows`). Run them with `nix flake check`. The weekly run of
-`test.yaml` also checks the end of life of the nixpkgs branch in `flake.lock`
-([FY-0036][fy-0036]). [`scorecard.yaml`](.github/workflows/scorecard.yaml) runs
-OpenSSF Scorecard through [workflow-scorecard][workflow-scorecard].
+(`checks.workflows`). [atom-nix][atom-nix] lints the Nix files with statix,
+deadnix and its hook of relative paths (`checks.nix`), [atom-shell][atom-shell]
+lints the shell scripts with shellcheck (`checks.shell`), and treefmt checks
+their formatting with nixfmt and shfmt (`checks.treefmt`). Run them with
+`nix flake check`. The weekly run of `test.yaml` also checks the end of life of
+the nixpkgs branch in `flake.lock` ([FY-0036][fy-0036]).
+[`scorecard.yaml`](.github/workflows/scorecard.yaml) runs OpenSSF Scorecard
+through [workflow-scorecard][workflow-scorecard].
 
 ## Bootstrap
 
@@ -79,6 +83,8 @@ Licensing of every file is declared in [REUSE.toml](REUSE.toml).
 
 [workflow-check]: https://github.com/flakeyard/workflow-check
 [workflow-scorecard]: https://github.com/flakeyard/workflow-scorecard
+[atom-nix]: https://github.com/flakeyard/atom-nix
+[atom-shell]: https://github.com/flakeyard/atom-shell
 [atom-workflows]: https://github.com/flakeyard/atom-workflows
 [fy-0034]: docs/adr/records/0034-check-every-repository-with-workflow-check.md
 [fy-0036]:
