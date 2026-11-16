@@ -26,15 +26,19 @@ them, and that also decides how they are pinned and updated.
 
 ## Decision
 
-The prefix of a repository name names its delivery mechanism:
+The prefix of a repository name names its delivery mechanism, except `lib-`,
+which names a role ([FY-0040](0040-share-code-through-lib-repositories.md)):
 
 - `atom-`: a flake-parts module, consumed as a flake input, pinned by commit in
   `flake.nix`.
 - `action-`: a composite action, consumed by `uses:` in a workflow step, pinned
-  by commit SHA. A library action, which only exposes its directory of shared
-  code, is one too ([FY-0035](0035-extract-logic-that-has-two-users.md)).
+  by commit SHA.
 - `workflow-`: one reusable workflow, consumed by `uses:` in a workflow job,
   pinned by commit SHA.
+- `lib-`: code shared by the flakeyard repositories of one area, named after it:
+  `lib-atom` for atoms, `lib-actions` for actions and reusable workflows. Its
+  README states how it is consumed and pinned, such as a flake input or a
+  library action ([FY-0035](0035-extract-logic-that-has-two-users.md)).
 - `image-`: an OCI image, consumed by `image:` in `devcontainer.json`, pinned by
   digest.
 - `template-`: a Copier template, consumed by `copier copy` and `copier update`,
@@ -57,8 +61,9 @@ secrets and permissions are versioned independently of other workflows.
   consumed through, from the list above.
 - A repository MUST deliver its product through exactly one mechanism. Other
   outputs MAY exist only for its own development and tests. Tests of the
-  consumers of a library action MAY fetch its source at the commit that their
-  `action.yml` or workflow pins; that is not a second mechanism.
+  consumers of a `lib-` repository MAY fetch its source at the commit that they
+  pin; that is not a second mechanism.
+- A `lib-` repository MUST NOT be consumed by projects directly.
 - A `workflow-` repository MUST contain exactly one reusable workflow.
 - The name after the prefix MUST be lowercase, hyphen-separated and MUST name a
   concern rather than a tool.

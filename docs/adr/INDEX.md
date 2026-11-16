@@ -6,7 +6,7 @@
 
 _None._
 
-## Accepted (25)
+## Accepted (26)
 
 - [FY-0001](records/0001-record-decisions.md) Record architecture decisions of
   the organization (2026-10-21)
@@ -58,6 +58,8 @@ _None._
 - [FY-0038](records/0038-roll-out-the-atoms.md) Roll out the atoms (2026-11-12)
 - [FY-0039](records/0039-reach-repository-files-in-nix-from-one-root.md) Reach
   repository files in Nix from one root (2026-11-12)
+- [FY-0040](records/0040-share-code-through-lib-repositories.md) Share code
+  through lib- repositories (2026-11-16)
 
 ## Rejected (0)
 

@@ -78,7 +78,11 @@ are:
 - `atom-workspace`: the glue a project has once. It builds `devShells.default`,
   installs the git hooks, enables the treefmt hook, makes treefmt find the root
   of the git work tree and sets global defaults such as excludes for generated
-  files. It has no inputs, and other atoms do not know about it.
+  files. It has no inputs other than `lib-atom`, and other atoms do not know
+  about it.
+
+Nix code that two atoms need lives in `lib-atom`, which every atom pins itself
+([FY-0040](0040-share-code-through-lib-repositories.md)).
 
 Updating projects from templates and generating SBOMs belong to actions, not
 atoms: both only make sense together with opening a pull request or uploading a
@@ -207,8 +211,10 @@ not tested.
 - An atom's public flake MUST declare as inputs exactly the upstream flakes
   whose modules it imports, under their canonical names `treefmt-nix` and
   `git-hooks`. New canonical names are added only by an `FY` decision.
-- An atom MUST NOT declare `nixpkgs`, `flake-parts` or a flakeyard repository as
-  an input of its public flake.
+- An atom MUST NOT declare `nixpkgs`, `flake-parts` or a flakeyard repository
+  other than `lib-atom` as an input of its public flake. It MUST pin `lib-atom`
+  itself and MUST NOT require consumers to declare or follow it
+  ([FY-0040](0040-share-code-through-lib-repositories.md)).
 - Before importing an upstream module, an atom MUST fail evaluation with the
   exact `follows` line to add when the consumer has an input of the same name
   with a different store path. It MUST NOT import anything from the consumer's

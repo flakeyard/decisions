@@ -62,11 +62,12 @@ comment.
 ### Library actions
 
 Shell code shared at run time without Nix is delivered by a library action. It
-is an `action-` repository ([FY-0003](0003-repository-naming.md)) whose one task
-is to expose its directory, and its product is the files in that directory. The
-first one is `action-shell-lib`, designed in [action-shell-lib
-ADR-0001][action-shell-lib-adr-0001]. It runs one step on Linux and another on
-every other runner:
+is a `lib-` repository ([FY-0003](0003-repository-naming.md)) consumed as an
+action, whose one task is to expose its directory, and its product is the files
+in that directory. The first one is `lib-actions`, designed in [lib-actions
+ADR-0001][lib-actions-adr-0001]; it replaced `action-shell-lib`
+([FY-0040](0040-share-code-through-lib-repositories.md)). It runs one step on
+Linux and another on every other runner:
 
 ```yaml
 outputs:
@@ -96,7 +97,7 @@ that directory:
 
 ```yaml
 - id: shell-lib
-  uses: flakeyard/action-shell-lib@<40-character sha> # v1.2.0
+  uses: flakeyard/lib-actions@<40-character sha> # v1.2.0
 - shell: bash
   env:
     SHELL_LIB: ${{ steps.shell-lib.outputs.path }}
@@ -135,8 +136,8 @@ The one exception to the rule is the loader of the library for local test runs.
 A loader cannot come from the library that it loads, so each consumer whose
 tests run locally keeps its own minimal one: unless `SHELL_LIB` is already set,
 it reads the commit from the file that pins it, fetches that commit once into a
-cache, such as `~/.cache/flakeyard/action-shell-lib/<commit>`, and sets
-`SHELL_LIB`. Everything else that the tests share comes from the library.
+cache, such as `~/.cache/flakeyard/lib-actions/<commit>`, and sets `SHELL_LIB`.
+Everything else that the tests share comes from the library.
 
 ### Versions
 
@@ -152,14 +153,14 @@ logic it runs ([FY-0030](0030-actions-workflows-and-release-bot.md)).
 
 ### Releases of a library change
 
-A change of `action-shell-lib` is released in this order: `action-shell-lib`,
-then `action-setup-nix` and `action-flake-lock`, then `workflow-release` and
+A change of `lib-actions` is released in this order: `lib-actions`, then
+`action-setup-nix` and `action-flake-lock`, then `workflow-release` and
 `workflow-check` once each. `workflow-check` also pins `action-setup-nix` and
 `action-flake-lock`, so it takes all three updates in one release.
 
-Renovate proposes updates of `flakeyard/action-shell-lib` with the commit type
-`fix` in consumers that ship the library to their users: actions, where it runs
-in `action.yml`, and reusable workflows, where it runs in the workflow their
+Renovate proposes updates of `flakeyard/lib-actions` with the commit type `fix`
+in consumers that ship the library to their users: actions, where it runs in
+`action.yml`, and reusable workflows, where it runs in the workflow their
 callers use. In repositories that use it only in their own CI or tests, such as
 `workflow-scorecard` and `image-devcontainer`, an update is `ci` like any other
 update of CI ([FY-0007](0007-branching-and-releases.md)). The rule for actions
@@ -179,9 +180,8 @@ their list.
 
 ### Bootstrap
 
-`action-shell-lib` is released before `workflow-release` and `action-setup-nix`
-use it. Its own first release runs on a `workflow-release` that does not use it
-yet.
+`lib-actions` is released before `workflow-release` and `action-setup-nix` use
+it. Its own first release runs on a `workflow-release` that does not use it yet.
 
 The Nix modules that are duplicated today stay until the atoms that own them
 ([FY-0017](0017-atom-contract.md)) are released: `atom-nix`, `atom-shell` and
@@ -205,8 +205,8 @@ This decision amends other records; the rest of each stays in force.
 - [FY-0030](0030-actions-workflows-and-release-bot.md), edited in place: the
   logic of an action may live in a library action it pins, and the tests of
   consumers may use `internal/testing/` of a library.
-- [FY-0022](0022-bootstrap.md), stated here: the place of `action-shell-lib` in
-  the bootstrap order and the exception for duplicated Nix modules, both under
+- [FY-0022](0022-bootstrap.md), stated here: the place of `lib-actions` in the
+  bootstrap order and the exception for duplicated Nix modules, both under
   "Bootstrap" above. An edit in place would renumber the steps that other
   records cite by number, and the exception has its own end condition.
 
@@ -254,16 +254,16 @@ This decision amends other records; the rest of each stays in force.
   `internal/testing/` MUST NOT be part of it.
 - A consumer MUST NOT be released as a major version only because it takes a
   major release of a library.
-- A change of `action-shell-lib` MUST be released in the order
-  `action-shell-lib`, then `action-setup-nix` and `action-flake-lock`, then
-  `workflow-release` and `workflow-check`.
-- Updates of `flakeyard/action-shell-lib` MUST be proposed with the commit type
-  `fix` in actions and reusable workflows that run the library for their users,
-  and with `ci` in repositories that use it only in their own CI or tests.
+- A change of `lib-actions` MUST be released in the order `lib-actions`, then
+  `action-setup-nix` and `action-flake-lock`, then `workflow-release` and
+  `workflow-check`.
+- Updates of `flakeyard/lib-actions` MUST be proposed with the commit type `fix`
+  in actions and reusable workflows that run the library for their users, and
+  with `ci` in repositories that use it only in their own CI or tests.
 
 ### Order and exceptions
 
-- `action-shell-lib` MUST be released before `workflow-release` and
+- `lib-actions` MUST be released before `workflow-release` and
   `action-setup-nix` use it.
 - The duplicated Nix modules MAY stay only until the atom that owns them is
   released; each repository with a copy MUST adopt the atom in its next pull
@@ -298,5 +298,5 @@ This decision amends other records; the rest of each stays in force.
 - **An exception for `action-setup-nix`.** Breaks the rule for the action that
   needs it most, and the hardened step works before Nix exists.
 
-[action-shell-lib-adr-0001]:
-  https://github.com/flakeyard/action-shell-lib/blob/main/docs/adr/records/0001-shell-library.md
+[lib-actions-adr-0001]:
+  https://github.com/flakeyard/lib-actions/blob/main/docs/adr/records/0001-shell-library.md
