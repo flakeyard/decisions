@@ -29,8 +29,11 @@ language in them suggests a coupling that does not exist.
   commit messages and pull request descriptions.
 - Markdown is formatted by prettier with prose wrapped at 80 characters and
   checked by markdownlint with its default rules. Lines may be longer only when
-  they cannot be broken, such as URLs and tables; long URLs are written as
-  reference links.
+  they cannot be broken, such as URLs and code; long URLs are written as
+  reference links. Tables count as lines: the default rule MD013 checks them, so
+  a table wider than 80 characters becomes a list.
+- Lines do not end with whitespace, so Markdown has no hard line breaks made of
+  trailing spaces.
 - Files generated or copied in by tools are excluded from formatters and text
   linters: `CHANGELOG.md`, `.release-please-manifest.json`, `flake.lock` at any
   depth, such as `dev/flake.lock`, and the license texts in `LICENSES/`. The
@@ -38,8 +41,10 @@ language in them suggests a coupling that does not exist.
   tool's next output differ. The exclusion does not apply to licensing checks
   (reuse) and secret scanning, which cover every file.
 - The em dash is written as `&mdash;` in Markdown, never as the raw character.
-- Spelling is checked by typos, and links by lychee as an app, since checks run
-  without network access ([FY-0004](0004-atom-contract.md)).
+- Spelling is checked by typos. Links inside the repository, to files and their
+  anchors, are checked by lychee offline in every check; all links are checked
+  by lychee as an app on a schedule, since checks run without network access
+  ([FY-0017](0017-atom-contract.md)).
 - `atom-markdown` and `atom-text` provide these tools; until they are released,
   the same tools are run from the host.
 - Repositories independent of programming languages do not mention specific
@@ -62,7 +67,9 @@ language in them suggests a coupling that does not exist.
   linters, such as prettier, markdownlint, typos and editorconfig-checker.
 - These files MUST NOT be excluded from reuse lint or secret scanning.
 - Markdown MUST NOT contain the raw em dash character; `&mdash;` MUST be used.
-- Every repository MUST pass typos. Links MUST be checked by the lychee app on a
+- Markdown MUST NOT contain lines that end with whitespace.
+- Every repository MUST pass typos. Links inside the repository MUST pass lychee
+  offline in the check; all links MUST be checked by the lychee app on a
   schedule.
 - Repositories other than `decisions` and `.github` that do not deliver
   language-specific products MUST NOT mention specific programming languages.
@@ -74,8 +81,8 @@ language in them suggests a coupling that does not exist.
 - (+) Uniform text with small, reviewable diffs.
 - (+) Formatting and spelling are checked by tools, not by reviewers.
 - (−) `&mdash;` is less readable in the source than the character it renders.
-- (−) Broken links are found on schedule, not in the pull request that broke
-  them.
+- (−) Broken external links are found on schedule, not in the pull request that
+  broke them. Broken links inside the repository fail the pull request.
 - (±) Language-specific examples belong in language-specific repositories, even
   where an example would make a generic one clearer.
 
