@@ -74,11 +74,13 @@ of each kind of repository is:
 - **Actions and reusable workflows**: inputs, outputs, secrets, required
   permissions and the events and runners they support; for `action-setup-nix`,
   also as listed in [action-setup-nix ADR-0001][action-setup-nix-adr-0001].
-- **Library actions**, in addition: the names of their functions, their
-  arguments and return codes, and the variables they read and write, as their
-  README documents them; `internal/testing/` is not part of it
-  ([FY-0035](0035-extract-logic-that-has-two-users.md)). A major release of a
-  library is not by itself a major release of its consumers.
+- **`lib-` repositories**
+  ([FY-0040](0040-share-code-through-lib-repositories.md)): the names of their
+  functions and their arguments and results, and, for a library action
+  ([FY-0035](0035-extract-logic-that-has-two-users.md)), the return codes and
+  the variables they read and write, as their README documents them;
+  `internal/testing/` is not part of it. A major release of a library is not by
+  itself a major release of its consumers.
 - **Dev container image**: as listed in [image-devcontainer
   ADR-0001][image-devcontainer-adr-0001].
 - **Templates**: questions and their defaults, the layout of generated projects,

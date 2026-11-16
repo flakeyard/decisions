@@ -43,7 +43,7 @@ the Nix formatting and shell checks in `workflow-check`, `workflow-scorecard`,
 
 Facts that shape the rollout:
 
-- `action-setup-nix`, `action-shell-lib`, `workflow-release`, `.github` and
+- `action-setup-nix`, `lib-actions`, `workflow-release`, `.github` and
   `decisions` have no flake, so their workflow linting, formatting and spelling
   run only locally ([workflow-check ADR-0001][workflow-check-adr-0001]).
 - The flake module of git-hooks.nix adds `checks.pre-commit` over the whole
@@ -81,7 +81,9 @@ Step 8 of FY-0022 builds the atoms in this order:
 2. `atom-workspace`;
 3. `atom-nix` and `atom-shell`, after which every repository with a copy allowed
    by FY-0035 adopts them in its next pull request;
-4. `atom-markdown`, `atom-text`, `atom-data-formats`, `atom-reuse`,
+4. `lib-atom` ([FY-0040](0040-share-code-through-lib-repositories.md)), which
+   the released atoms then take;
+5. `atom-markdown`, `atom-text`, `atom-data-formats`, `atom-reuse`,
    `atom-secrets` and `atom-commits`.
 
 Until `atom-workspace` is released, a repository that adopts `atom-workflows`
@@ -93,12 +95,11 @@ the repository adopts `atom-workspace`.
 A repository whose root flake is consumed by others, an atom or
 `action-flake-lock`, keeps its development flake in `dev/`, as FY-0012 lets
 atoms do. Every other repository uses its root flake as its development flake.
-`action-setup-nix`, `action-shell-lib`, `workflow-release`, `.github` and
-`decisions` get a root `flake.nix` that only imports atoms and, where the
-repository's tests need tools no atom provides, declares them in
-`devShells.flakeyard-project` (FY-0017). Every repository lists the checks of
-its atoms in the input `expect-checks` of `workflow-check`, so a removed import
-fails CI.
+`action-setup-nix`, `lib-actions`, `workflow-release`, `.github` and `decisions`
+get a root `flake.nix` that only imports atoms and, where the repository's tests
+need tools no atom provides, declares them in `devShells.flakeyard-project`
+(FY-0017). Every repository lists the checks of its atoms in the input
+`expect-checks` of `workflow-check`, so a removed import fails CI.
 
 `image-devcontainer` is the one exception. By the owner's decision of
 2026-11-02, made with

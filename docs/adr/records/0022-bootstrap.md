@@ -62,7 +62,9 @@ depends on it:
 `action-shell-lib` before the steps that use it and lets duplicated Nix modules
 stay until their atoms are released. [FY-0038](0038-roll-out-the-atoms.md) sets
 the order of the atoms inside step 8 and answers the questions below about the
-atoms.
+atoms. [FY-0040](0040-share-code-through-lib-repositories.md) puts `lib-atom`
+before the atoms that take it and replaces `action-shell-lib` with
+`lib-actions`.
 
 Steps 6 to 10 were not designed when this decision was made. Each of them gets
 an accepted ADR, in this repository or in the repository of the product, before
