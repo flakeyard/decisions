@@ -64,8 +64,10 @@ are:
 - `atom-workflows`: GitHub Actions workflow and action files. actionlint and
   zizmor.
 - `atom-markdown`: documentation. prettier for Markdown only; markdownlint;
-  lychee as an app.
-- `atom-data-formats`: YAML, JSON and TOML formatters.
+  lychee offline as a hook for links inside the repository, and as an app for
+  all links.
+- `atom-data-formats`: YAML, JSON and TOML formatters other than prettier, which
+  `atom-markdown` owns.
 - `atom-text`: all files. typos; editorconfig-checker limited to charset, line
   endings, final newline and trailing whitespace.
 - `atom-reuse`: licensing. reuse lint.
