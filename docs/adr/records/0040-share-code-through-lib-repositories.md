@@ -107,7 +107,9 @@ its own `flake.lock`. Projects do not declare it and write no `follows` for it;
 every atom runs with the revision it was released with, and the major versions
 of `lib-atom` are invisible to projects. An atom's dev flake reads the revision
 of `lib-atom` from the atom's root `flake.lock` and fetches that revision, so
-that an atom has one pin of `lib-atom`.
+that an atom has one pin of `lib-atom`. The few lines that do this are kept in
+every atom, as the loader of a library in FY-0035: they cannot come from
+`lib-atom` before it is fetched.
 
 `lib-atom` is released before the atoms take a new revision. Renovate proposes
 its updates in atoms with the commit type `fix`, since a release of the atom
@@ -143,7 +145,9 @@ references it.
   MUST live in its `internal/testing/`, which MUST NOT be part of its public
   API.
 - An atom's dev flake MUST take the revision of `lib-atom` from the atom's root
-  `flake.lock`.
+  `flake.lock`. The loader that reads it and fetches that revision MAY be kept
+  in every atom, since it cannot come from `lib-atom` itself, and MUST do
+  nothing else.
 - Renovate MUST propose updates of `lib-atom` in atoms with the commit type
   `fix`.
 - `action-flake-lock` MUST accept nested entries of `flakeyard/lib-*` locked
