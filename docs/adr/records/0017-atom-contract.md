@@ -39,6 +39,13 @@ Experiments with real upstream revisions showed:
 - The same repository referenced as `github:` and as `git+https://github.com`
   gives the same store path but two lock entries and two fetches.
 
+Of the YAML formatters in nixpkgs that run without network access, yamlfmt
+rewrites the value of block scalars with the indicator `+` in some
+configurations, and prettier keeps every value; prettier is also what formats
+the YAML and JSON of flakeyard today. A tool may therefore serve two domains
+when each passes its own files and names its formatter differently, so that no
+single-valued option is set twice.
+
 An earlier split by kind of tool (formatters, linters, security, maintenance)
 cut domains across atoms (`shfmt` in one, `shellcheck` in another) and bundled
 unrelated concerns (secret scanning with SBOM generation).
@@ -63,11 +70,14 @@ are:
 - `atom-shell`: shell scripts. shfmt; shellcheck.
 - `atom-workflows`: GitHub Actions workflow and action files. actionlint and
   zizmor.
-- `atom-markdown`: documentation. prettier for Markdown only; markdownlint;
-  lychee offline as a hook for links inside the repository, and as an app for
-  all links.
-- `atom-data-formats`: YAML, JSON and TOML formatters other than prettier, which
-  `atom-markdown` owns.
+- `atom-markdown`: documentation. prettier for Markdown; markdownlint; lychee
+  offline as a hook for links inside the repository, and as an app for all
+  links.
+- `atom-data-formats`: YAML, JSON and TOML, and the schemas of data files.
+  prettier for YAML and JSON, taplo for TOML; yamllint, biome lint for JSON,
+  taplo lint, and check-jsonschema with the schemas its package ships for the
+  metadata of actions, Renovate, Dependabot and issue templates. Workflows are
+  left to the schema checks of `atom-workflows`.
 - `atom-text`: all files. typos; editorconfig-checker limited to charset, line
   endings, final newline and trailing whitespace.
 - `atom-reuse`: licensing. reuse lint.
@@ -245,9 +255,13 @@ not tested.
 ### Ownership
 
 - Every tool, git hook id and treefmt formatter MUST have exactly one owning
-  atom. Hook ids and formatter names that upstream does not define MUST start
-  with `flakeyard-`. Names an atom adds to `apps`, `checks` and `devShells` MUST
-  start with its domain or with `flakeyard-<atom>`.
+  atom. The one exception is prettier: `atom-markdown` owns it for Markdown and
+  `atom-data-formats` for YAML and JSON, each under a formatter name of its own
+  and over files the other does not format, and a project's prettier
+  configuration replaces the default of both. Hook ids and formatter names that
+  upstream does not define MUST start with `flakeyard-`. Names an atom adds to
+  `apps`, `checks` and `devShells` MUST start with its domain or with
+  `flakeyard-<atom>`.
 - Atoms MUST set only options of their own tools, with `lib.mkOverride 900`, and
   MUST take tool packages from the consumer's `pkgs` explicitly. List options
   that upstream defines at plain priority, such as `treefmt.settings.excludes`
