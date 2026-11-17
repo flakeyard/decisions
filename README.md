@@ -43,8 +43,8 @@ worktree, and run `direnv block` before you check out a branch you do not trust,
 since entering the directory runs that branch's shell hook. Commit inside the
 container, whose Nix store has the tools of the hooks. The checks of [CI](#ci)
 and [Bootstrap](#bootstrap) run in it as in CI; tools that the shell does not
-have come from nixpkgs, such as `nix run nixpkgs#prettier`. Nix on the host
-works as well: `direnv allow` or `nix develop` gives the same shell.
+have come from nixpkgs, such as `nix run nixpkgs#reuse`. Nix on the host works
+as well: `direnv allow` or `nix develop` gives the same shell.
 
 ## CI
 
@@ -56,10 +56,19 @@ titles, `renovate.json` and the immutable release behind its preset tag
 [atom-workflows][atom-workflows] lints the workflows with actionlint and zizmor
 (`checks.workflows`). [atom-nix][atom-nix] lints the Nix files with statix,
 deadnix and its hook of relative paths (`checks.nix`), [atom-shell][atom-shell]
-lints the shell scripts with shellcheck (`checks.shell`), and treefmt checks
-their formatting with nixfmt and shfmt (`checks.treefmt`). Run them with
+lints the shell scripts with shellcheck (`checks.shell`),
+[atom-markdown][atom-markdown] lints the Markdown files with markdownlint and
+checks their links inside the repository with lychee (`checks.markdown`),
+[atom-text][atom-text] checks the spelling of every file with typos and its line
+endings, final newline and trailing whitespace with editorconfig-checker
+(`checks.text`), [atom-data-formats][atom-data-formats] lints the YAML, JSON and
+TOML files with yamllint, biome and taplo and `renovate.json` with
+check-jsonschema (`checks.data-formats`), and treefmt checks the formatting with
+nixfmt, shfmt, prettier and taplo (`checks.treefmt`). Run them with
 `nix flake check`. The weekly run of `test.yaml` also checks the end of life of
-the nixpkgs branch in `flake.lock` ([FY-0036][fy-0036]).
+the nixpkgs branch in `flake.lock` ([FY-0036][fy-0036]), checks every link of
+the Markdown files and runs the audits of zizmor that need the network, with the
+apps `markdown-links` and `workflows-online`.
 [`scorecard.yaml`](.github/workflows/scorecard.yaml) runs OpenSSF Scorecard
 through [workflow-scorecard][workflow-scorecard].
 
@@ -69,8 +78,8 @@ This repository is bootstrapped under
 [FY-0022](docs/adr/records/0022-bootstrap.md). Until the providers of its
 remaining checks are released:
 
-- Prettier, markdownlint, typos and `reuse lint` run locally before every pull
-  request (provider: the atoms).
+- `reuse lint` runs locally before every pull request (provider: an atom that is
+  not released yet).
 
 ## License
 
@@ -83,8 +92,11 @@ Licensing of every file is declared in [REUSE.toml](REUSE.toml).
 
 [workflow-check]: https://github.com/flakeyard/workflow-check
 [workflow-scorecard]: https://github.com/flakeyard/workflow-scorecard
+[atom-data-formats]: https://github.com/flakeyard/atom-data-formats
+[atom-markdown]: https://github.com/flakeyard/atom-markdown
 [atom-nix]: https://github.com/flakeyard/atom-nix
 [atom-shell]: https://github.com/flakeyard/atom-shell
+[atom-text]: https://github.com/flakeyard/atom-text
 [atom-workflows]: https://github.com/flakeyard/atom-workflows
 [fy-0034]: docs/adr/records/0034-check-every-repository-with-workflow-check.md
 [fy-0036]:
