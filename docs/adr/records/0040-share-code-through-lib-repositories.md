@@ -113,9 +113,13 @@ every atom, as the loader of a library in FY-0035: they cannot come from
 
 `lib-atom` is released before the atoms take a new revision. Renovate proposes
 its updates in atoms with the commit type `fix`, since a release of the atom
-delivers the new code to projects. `lib-atom` checks every change against the
-released atoms in its own tests, and the weekly scheduled tests of atoms
-override their `lib-atom` with its current branch (FY-0038).
+delivers the new code to projects. Every pull request of `lib-atom` runs the
+tests of the released atoms with its working tree in place of the revision they
+pin, so a change that breaks an atom is not merged. Atoms see a new `lib-atom`
+only in the pull request that updates their pin, where their own tests run; the
+scheduled tests of atoms do not override it, since their dev flakes reach it
+through the loader rather than as an input that `override-inputs` of
+workflow-check could replace (FY-0038).
 
 ### Locks
 
@@ -150,6 +154,8 @@ references it.
   nothing else.
 - Renovate MUST propose updates of `lib-atom` in atoms with the commit type
   `fix`.
+- Every pull request of `lib-atom` MUST run the tests of the released atoms with
+  its working tree in place of the revision they pin.
 - `action-flake-lock` MUST accept nested entries of `flakeyard/lib-*` locked
   more than once. `workflow-check` MUST check the root `flake.lock` of a
   repository whose checked flake is in a subdirectory.
