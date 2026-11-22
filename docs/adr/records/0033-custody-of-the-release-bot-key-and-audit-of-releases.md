@@ -6,7 +6,17 @@ date: 2026-11-03
 supersedes: []
 superseded_by: []
 related:
-  [FY-0007, FY-0011, FY-0024, FY-0028, FY-0029, FY-0030, FY-0032, FY-0034]
+  [
+    FY-0007,
+    FY-0011,
+    FY-0024,
+    FY-0028,
+    FY-0029,
+    FY-0030,
+    FY-0032,
+    FY-0034,
+    FY-0041,
+  ]
 affects:
   [
     ".github:org/README.md",
@@ -112,6 +122,10 @@ it checks that:
   `autorelease: tagged` ([FY-0007](0007-branching-and-releases.md));
 - that pull request was merged by a reviewer of the environment `release`
   (`org/repository/environments/release-reviewers.json` in `.github`).
+
+Pull requests are merged through the merge queue
+([FY-0041](0041-merge-through-the-merge-queue.md)): `merged_by` is the account
+that added the pull request to the queue.
 
 It does not check the moving tags `vX`; the runbook reviews them by hand. It
 reports every mismatch and then fails; a failed run is the alert. It reads with

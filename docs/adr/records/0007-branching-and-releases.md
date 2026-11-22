@@ -5,7 +5,7 @@ status: accepted
 date: 2026-10-22
 supersedes: []
 superseded_by: []
-related: [FY-0002, FY-0003, FY-0006, FY-0024]
+related: [FY-0002, FY-0003, FY-0006, FY-0024, FY-0041]
 affects:
   [
     ".github:org/repository/**",
@@ -32,10 +32,10 @@ the history and the changelog have to be produced without manual work in every
 repository.
 
 The organization is on the GitHub Free plan: rulesets are configured per
-repository and merge queues are not available. Organization settings already
-allow only squash merges with the pull request title as the commit message,
-require signed commits on `main` and restrict tags `v*` to the `flakeyard-bot`
-GitHub App.
+repository, and the merge queue is available in public repositories only through
+a ruleset. Organization settings already allow only squash merges with the pull
+request title as the commit message, require signed commits on `main` and
+restrict tags `v*` to the `flakeyard-bot` GitHub App.
 
 ## Decision
 
@@ -117,6 +117,11 @@ released repository.
 - Releases MUST be created only from a merged release pull request.
 - The moving tag `vX` MUST NOT have a GitHub release of its own.
 - `.github` and `decisions` MUST NOT have release tooling.
+
+[FY-0041](0041-merge-through-the-merge-queue.md) amends the merge and protection
+rules above: pull requests to the default branch are merged through the merge
+queue, and `release/v*` is protected by the same rules as `main` except the
+queue.
 
 ## Consequences
 
