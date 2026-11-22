@@ -5,7 +5,7 @@ status: accepted
 date: 2026-11-05
 supersedes: [FY-0031]
 superseded_by: []
-related: [FY-0001, FY-0009, FY-0022, FY-0028, FY-0030]
+related: [FY-0001, FY-0009, FY-0022, FY-0028, FY-0030, FY-0041]
 affects:
   [
     "*:.github/workflows/test.yaml",
@@ -114,6 +114,11 @@ after their release; until then it runs their checks as FY-0022 describes.
   with `integration_id` 15368, with `strict_required_status_checks_policy` and
   `do_not_enforce_on_create` set to `true`.
 - A caller's job that may be skipped MUST NOT set `name:`.
+
+[FY-0041](0041-merge-through-the-merge-queue.md) amends these rules: the ruleset
+of the default branch sets `strict_required_status_checks_policy` to `false` and
+merges through the merge queue, `release/v*` keeps it `true`, and `test.yaml`
+triggers on `merge_group`.
 
 ### Scorecard
 
