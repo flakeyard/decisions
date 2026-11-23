@@ -6,7 +6,7 @@
 
 _None._
 
-## Accepted (27)
+## Accepted (28)
 
 - [FY-0001](records/0001-record-decisions.md) Record architecture decisions of
   the organization (2026-10-21)
@@ -62,6 +62,9 @@ _None._
   through lib- repositories (2026-11-16)
 - [FY-0041](records/0041-merge-through-the-merge-queue.md) Merge through the
   merge queue (2026-11-22)
+- [FY-0042](records/0042-set-up-the-dev-container-with-one-command-and-keep-worktrees-inside-it.md)
+  Set up the dev container with one command and keep worktrees inside it
+  (2026-11-23)
 
 ## Rejected (0)
 
