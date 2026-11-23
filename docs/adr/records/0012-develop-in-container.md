@@ -5,7 +5,7 @@ status: accepted
 date: 2026-10-22
 supersedes: []
 superseded_by: []
-related: [FY-0004, FY-0005, FY-0009, FY-0017]
+related: [FY-0004, FY-0005, FY-0009, FY-0017, FY-0042]
 affects:
   [
     "*:.devcontainer/**",
@@ -119,6 +119,11 @@ used host tools.
 - Local verification MUST use the same commands as CI.
 - The README of every repository MUST describe opening it in the container and
   the verification commands.
+
+[FY-0042](0042-set-up-the-dev-container-with-one-command-and-keep-worktrees-inside-it.md)
+amends the setup and worktree rules above: `postCreateCommand` is exactly
+`devcontainer-setup`, a command of the image, and worktrees are created inside
+the workspace under `.worktrees/` and used from one container.
 
 ## Consequences
 
