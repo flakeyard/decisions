@@ -41,6 +41,12 @@ Three failures were observed:
   entering the development shell in one container rewrites the shared hooks with
   paths of its own store. A commit in another container then calls tools that do
   not exist in its store.
+- **Absolute paths of worktrees.** git records a worktree and its main checkout
+  by absolute paths. The workspace is mounted at `/home/dev/NAME`, a different
+  path from the one on the host, so a worktree created in the container is
+  broken for git on the host, and one created on the host is broken in the
+  container. git 2.48 added `worktree.useRelativePaths`, which records relative
+  paths instead.
 - **A setup that succeeds on a broken shell.** `direnv exec . true` exits with 0
   when the flake fails to evaluate or build: direnv reports the error and still
   runs the command. The container is created without a development shell and
@@ -77,6 +83,10 @@ the workspace, prints one summary line and exits non-zero when:
 - there is no pre-commit hook at `core.hooksPath`, or a tool that the hook calls
   is missing from the store.
 
+Before those checks, it sets `git config --local worktree.useRelativePaths true`
+in the repository, so that worktrees created afterwards work both in the
+container and from git on the host.
+
 The `postCreateCommand` of every repository with a development shell is exactly
 `devcontainer-setup`. A failed setup fails the creation of the container, so a
 broken shell is seen at once.
@@ -96,6 +106,7 @@ The README of every repository says, in its development section, that:
 
 - worktrees are created with `git worktree add .worktrees/NAME` and used from
   the same container;
+- git on the host has to be 2.48 or newer to use those worktrees;
 - `direnv allow` is run once in every worktree;
 - `direnv block` is run in a worktree before a branch that is not trusted is
   checked out in it.
@@ -127,7 +138,8 @@ This decision amends [FY-0012](0012-develop-in-container.md); the rest of it
 stays in force. The only allowed `postCreateCommand` is `devcontainer-setup`,
 instead of `direnv allow` or `direnv allow && direnv exec . true`; worktrees are
 created inside the workspace and used from one container; `.gitignore` also
-lists `.worktrees/`; and the README states how worktrees are created.
+lists `.worktrees/`; worktrees record relative paths; and the README states how
+worktrees are created.
 
 ## Constraints
 
@@ -139,15 +151,18 @@ lists `.worktrees/`; and the README states how worktrees are created.
 - `devcontainer-setup` MUST exit non-zero when the workspace is a worktree whose
   `.git` points outside the mount, when the development shell does not evaluate
   or build, or when the pre-commit hook or a tool it calls is missing.
+- `devcontainer-setup` MUST set `worktree.useRelativePaths` to `true` in the
+  local git configuration of the repository.
 - Worktrees MUST be created inside the workspace, under `.worktrees/`, and MUST
   be used from the container of that workspace. A worktree outside the workspace
   MUST NOT be documented or relied on as supported.
 - The `.gitignore` of every repository and of every generated project with a
   `postCreateCommand` MUST contain `.worktrees/`.
 - The README of every repository MUST say that worktrees are created with
-  `git worktree add .worktrees/NAME` and used from the same container, that
-  `direnv allow` is run once per worktree, and that `direnv block` is run before
-  an untrusted branch is checked out.
+  `git worktree add .worktrees/NAME` and used from the same container, that git
+  on the host MUST be 2.48 or newer to use them, that `direnv allow` is run once
+  per worktree, and that `direnv block` is run before an untrusted branch is
+  checked out.
 - The Nix store MUST stay in the container; this decision MUST NOT be read as a
   reason to add a volume for `/nix`.
 - A repository MUST NOT set `postCreateCommand` to `devcontainer-setup` before
@@ -163,8 +178,12 @@ lists `.worktrees/`; and the README states how worktrees are created.
   work.
 - (−) `devcontainer-setup` is public API of the image: changing its behaviour is
   a release of the image under [FY-0024](0024-versioning-and-support.md).
-- (−) A worktree created in the container records the paths of the container, so
-  git on the host does not find it; worktrees are used from the container.
+- (+) Worktrees record relative paths, so a worktree created in the container
+  works from git on the host and the reverse.
+- (−) git on the host older than 2.48 cannot use those worktrees.
+- (±) Worktrees created before the setup set `worktree.useRelativePaths` keep
+  their absolute paths until `git worktree repair --relative-paths` rewrites
+  them.
 - (−) One container serves every worktree of a repository, so their builds share
   its disk and its store.
 - (±) The development shell is downloaded once per container, about 36 seconds
