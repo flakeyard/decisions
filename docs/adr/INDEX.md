@@ -6,7 +6,7 @@
 
 _None._
 
-## Accepted (28)
+## Accepted (29)
 
 - [FY-0001](records/0001-record-decisions.md) Record architecture decisions of
   the organization (2026-10-21)
@@ -65,6 +65,8 @@ _None._
 - [FY-0042](records/0042-set-up-the-dev-container-with-one-command-and-keep-worktrees-inside-it.md)
   Set up the dev container with one command and keep worktrees inside it
   (2026-11-23)
+- [FY-0043](records/0043-queue-a-release-pull-request-behind-commits-that-release-nothing.md)
+  Queue a release pull request behind commits that release nothing (2026-11-24)
 
 ## Rejected (0)
 
